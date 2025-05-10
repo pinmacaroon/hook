@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--- cspell:disable-next-line --->    
+    <title>dchook</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px black solid;
+        }
+
+        table td, table th {
+            border: 1px black solid;
+        }
+        pre {
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="dchook">dchook <a href="#dchook">&swarrow;</a></h1>
+    <p>Send Minecraft chat messages to Discord with ease!</p>
+    <h2 id="documentation">Documentation <a href="#documentation">&swarrow;</a></h2>
+    <!--- cspell:disable-next-line --->    
+    <h3 id="dchook_properties"><code>dchook.properties</code> <a href="#dchook_properties">&swarrow;</a></h3>
+    <table>
+        <tr>
+            <th>parameter key</th>
+            <th>type</th>
+            <th>default<sup>[1]</sup></th>
+            <th>fallback<sup>[2]</sup></th>
+            <th>use</th>
+        </tr>
+        <tr>
+            <td><code></code></td>
+            <td></td>
+            <td><code></code></td>
+            <td><code></code></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>functions.mod_enabled</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>enables/disables the mod's functionality</td>
+        </tr>
+        <tr>
+            <td><code>functions.allow_ooc_messages</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>allow players to be ignored from proxying if their message ends with double slashes?</td>
+        </tr>
+        <tr>
+            <td><code>webhook.url</code></td>
+            <td>String</td>
+            <td><code>https://discord.com/api/webhooks/000/ABCDEF</code></td>
+            <td><code></code> <i>(blank string)</i></td>
+            <td>url of webhook</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.starting</code></td>
+            <td>String</td>
+            <td><code>The server is starting!</code></td>
+            <td><code>messages.server.starting</code></td>
+            <td>start message</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.stopped</code></td>
+            <td>String</td>
+            <td><code>The server has been stopped!</code></td>
+            <td><code>messages.server.stopped</code></td>
+            <td>stop message</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.started</code></td>
+            <td>String</td>
+            <td><code>The server has started!</code></td>
+            <td><code>messages.server.started</code></td>
+            <td>opened/fully started message</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.stopping</code></td>
+            <td>String</td>
+            <td><code>The server is stopping!</code></td>
+            <td><code>messages.server.stopping</code></td>
+            <td>stopping message</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.starting.allowed</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>start message allowed?</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.stopped.allowed</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>stop message allowed?</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.started.allowed</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>opened/fully started message</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.stopping.allowed</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>stopping message allowed?</td>
+        </tr>
+        <tr>
+            <td><code>messages.server.game.allowed</code></td>
+            <td>bool</td>
+            <td><code>true</code></td>
+            <td><code>false</code></td>
+            <td>default leave/join, advancement and death messages allowed?</td>
+        </tr>
+    </table>
+    <p>[1]: default, as in its the value generated with the file</p>
+    <p>[2]: fallback, as in if the key isn't found, this value will be used instead</p>
+</body>
+</html>

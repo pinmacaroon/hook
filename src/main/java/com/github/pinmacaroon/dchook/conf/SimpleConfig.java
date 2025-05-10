@@ -126,7 +126,7 @@ public class SimpleConfig {
             String[] parts = entry.split("=", 2);
             if( parts.length == 2 ) {
                 //comments go brrrrrrrrrrr
-                String temp = parts[1].split(" //")[0];
+                String temp = parts[1].split(" #")[0];
                 config.put( parts[0], temp );
             }else{
                 throw new RuntimeException("Syntax error in config file on line " + line + "!");
