@@ -78,3 +78,4 @@ sidebar for links!
 - This mod uses
   [simple-config](https://github.com/magistermaks/fabric-simplelibs/tree/master/simple-config)
   for configuration file management.
+- This mod uses [crafthead](https://crafthead.net/)'s API for player chat icons.
