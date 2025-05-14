@@ -34,6 +34,7 @@ public class Hook implements DedicatedServerModInitializer {
 
 	@Override
 	public void onInitializeServer() {
+		//TODO new feature: timed info https://stackoverflow.com/questions/1784331/how-do-you-efficiently-repeat-an-action-every-x-minutes
 		ModConfigs.registerConfigs();
 		if(!ModConfigs.FUNCTIONS_MODENABLED){
 			LOGGER.error("hook mod was explicitly told to not operate!");

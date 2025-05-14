@@ -1,0 +1,49 @@
+@font-face {
+    font-family: Figtree;
+    src: url("Figtree-VariableFont_wght.ttf");
+}
+@font-face {
+    font-family: RobotoMono;
+    src: url("RobotoMono-VariableFont_wght.ttf");
+}
+
+div.center {
+    margin: auto;
+    display: block;
+    width: 50%;
+}
+html {
+    background-color: #A1B2FF;
+    font-family: Figtree;
+}
+
+span.fraction {
+    font-feature-settings: "frac";
+}
+
+a:visited{
+    color: darkblue;
+}
+
+a:link {
+    font-weight: 600;
+}
+
+hr {
+    border: 1px black solid;
+}
+
+s {
+    text-decoration: line-through;
+    text-decoration-style: wavy;
+}
+
+img#secret_gif {
+    background-color: black;
+    visibility: hidden;
+}
+
+code, pre {
+    font-family: RobotoMono;
+    font-size: smaller;
+}

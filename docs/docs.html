@@ -43,11 +43,52 @@
         </p>
     </div>
     <div id="cmain" class="center">
-        <zero-md src="README.md">
+        <zero-md src="docs.md">
             <template>
                 <style>
                     img {
                         width: 100%;
+                    }
+
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    
+                    table td, table th {
+                        border: 1px black solid;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        max-width: 0;
+                        font-size: smaller;
+                    }
+                    table td:hover {
+                        overflow: visible;
+                        background-color: #748eff;
+                        width: 40%;
+                        overflow: visible;
+                        white-space: unset;
+                    }
+                    
+                    code.language-properties {
+                        display: block;
+                        background-color: #748eff;
+                    }
+
+                    code.language-properties span.hljs-comment {
+                        color: lightblue;
+                        font-style: italic;
+                    }
+
+                    code.language-properties span.hljs-attr {
+                        font-weight: bold;
+                        color: darkred;
+                    }
+
+                    code.language-properties span.hljs-literal {
+                        font-weight: bold;
+                        color: darkgreen;
                     }
                 </style>
             </template>
