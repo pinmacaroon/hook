@@ -27,7 +27,7 @@ public class Hook implements DedicatedServerModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static HttpClient HTTPCLIENT = HttpClient.newHttpClient();
 	public static Gson GSON = new GsonBuilder().create();
-	public static final String VERSION = "0.2.1";
+	public static final String VERSION = "0.2.4";
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
 	public static final Pattern WEBHOOK_URL_PATTERN = Pattern.compile("^https:\\/\\/(ptb\\.|canary\\.)?discord\\.com\\/api\\/webhooks\\/\\d+\\/.+$");
 	//public static HttpClient HTTPCLIENT = HttpClient.newHttpClient();
