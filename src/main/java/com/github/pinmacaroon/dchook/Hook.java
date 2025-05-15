@@ -168,7 +168,7 @@ public class Hook implements DedicatedServerModInitializer {
 
 			HashMap<String, String> requestbody = new HashMap<>();
 			requestbody.put("content", message.getSignedContent());
-			requestbody.put("username", sender.getName().getLiteralString());
+			requestbody.put("username", sender.getName().getString()); //TODO FIXXXXXXXXX
 			requestbody.put("avatar_url", "https://crafthead.net/helm/" + message.getSender().toString());
 
 
