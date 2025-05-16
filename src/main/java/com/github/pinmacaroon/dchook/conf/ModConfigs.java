@@ -10,6 +10,7 @@ public class ModConfigs {
     public static SimpleConfig CONFIG;
     private static ModConfigProvider configs;
 
+    // TODO optimize webhook url
     public static String WEBHOOK_URL;
     public static String MESSAGES_SERVER_STARTING;
     public static String MESSAGES_SERVER_STOPPED;
@@ -23,6 +24,7 @@ public class ModConfigs {
     public static boolean MESSAGES_SERVER_STOPPING_ALLOWED;
 
     public static boolean FUNCTIONS_MODENABLED;
+    public static boolean FUNCTIONS_PROMOTIONS_ENABLED;
 
     public static void registerConfigs() {
         configs = new ModConfigProvider();
@@ -40,6 +42,7 @@ public class ModConfigs {
         configs.addDocumentationLine("Configure functionality of the mod:");
         configs.addKeyValuePair(new Pair<>("functions.mod_enabled", true), "enables/disables the mod's functionality");
         configs.addKeyValuePair(new Pair<>("functions.allow_ooc_messages", true), "allow players to be ignored from proxying if their message ends with double slashes?");
+        configs.addKeyValuePair(new Pair<>("functions.promotions.enabled", true), "are tips and hints/promotion embeds allowed to be sent to Discord");
         configs.addBlankLine();
 
         configs.addDocumentationLine("Configure Discord connection related parameters:");
@@ -75,7 +78,8 @@ public class ModConfigs {
         MESSAGES_SERVER_STOPPING_ALLOWED = CONFIG.getOrDefault("messages.server.stopping.allowed", false);
 
         FUNCTIONS_MODENABLED = CONFIG.getOrDefault("functions.mod_enabled", true);
-        FUNCTIONS_MODENABLED = CONFIG.getOrDefault("messages.server.game.allowed", false);
+        FUNCTIONS_PROMOTIONS_ENABLED = CONFIG.getOrDefault("functions.promotions.enabled", false);
+        //_ = CONFIG.getOrDefault("messages.server.game.allowed", false);
 
         System.out.println("all " + configs.getConfigsList().size() + " have been set properly");
     }

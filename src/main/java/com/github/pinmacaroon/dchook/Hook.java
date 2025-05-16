@@ -1,6 +1,7 @@
 package com.github.pinmacaroon.dchook;
 
 import com.github.pinmacaroon.dchook.conf.ModConfigs;
+import com.github.pinmacaroon.dchook.util.PromotionProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -18,7 +19,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
@@ -27,15 +30,22 @@ public class Hook implements DedicatedServerModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static HttpClient HTTPCLIENT = HttpClient.newHttpClient();
 	public static Gson GSON = new GsonBuilder().create();
-	public static final String VERSION = "0.2.4";
+	public static final String VERSION = "0.3.0";
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
+	public static final Random RANDOM = new Random(Instant.now().getEpochSecond());
 	public static final Pattern WEBHOOK_URL_PATTERN = Pattern.compile("^https:\\/\\/(ptb\\.|canary\\.)?discord\\.com\\/api\\/webhooks\\/\\d+\\/.+$");
 	//public static HttpClient HTTPCLIENT = HttpClient.newHttpClient();
 
 	@Override
 	public void onInitializeServer() {
-		//TODO new feature: timed info https://stackoverflow.com/questions/1784331/how-do-you-efficiently-repeat-an-action-every-x-minutes
-		ModConfigs.registerConfigs();
+		/*
+		TODO new feature (might be obsolete bc of bot): timed info
+			https://stackoverflow.com/questions/1784331/how-do-you-efficiently-repeat-an-action-every-x-minutes
+
+		TODO add promotion messages
+		TODO add two way chat with dicord4j
+		*/
+        ModConfigs.registerConfigs();
 		if(!ModConfigs.FUNCTIONS_MODENABLED){
 			LOGGER.error("hook mod was explicitly told to not operate!");
 			return;
@@ -66,6 +76,9 @@ public class Hook implements DedicatedServerModInitializer {
         }
 
 		LOGGER.info("all checks succeeded, starting webhook managing!");
+		if(!ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED){
+			LOGGER.warn("promotions were disabled by config. please consider turning them back on to support the mod!");
+		}
 
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 			if (!ModConfigs.MESSAGES_SERVER_STARTING_ALLOWED) return;
@@ -89,6 +102,8 @@ public class Hook implements DedicatedServerModInitializer {
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
+
+
         });
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
@@ -113,6 +128,12 @@ public class Hook implements DedicatedServerModInitializer {
 			} catch (InterruptedException | ExecutionException e) {
 				throw new RuntimeException(e);
 			}
+			if(ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED){
+				PromotionProvider.sendAutomaticPromotion(URI.create(
+						ModConfigs.WEBHOOK_URL
+				));
+			}
+
 		});
 
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
@@ -168,7 +189,7 @@ public class Hook implements DedicatedServerModInitializer {
 
 			HashMap<String, String> requestbody = new HashMap<>();
 			requestbody.put("content", message.getSignedContent());
-			requestbody.put("username", sender.getName().getString()); //TODO FIXXXXXXXXX
+			requestbody.put("username", sender.getName().getString());
 			requestbody.put("avatar_url", "https://crafthead.net/helm/" + message.getSender().toString());
 
 
