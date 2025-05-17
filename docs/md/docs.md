@@ -45,7 +45,7 @@ messages.server.starting.allowed=true
 | messages.server.stopped.allowed | true | false | stop message allowed?                                                                  |
 | messages.server.started.allowed | true | false | opened/fully started message                                                           |
 | messages.server.stopping.allowed | true | false | stopping message allowed?                                                              |
-| messages.server.game.allowed | true | false | default leave/join, advancement and death messages allowed? (currently not functional) |                      |
+| messages.server.game.allowed | true | false | default leave/join, advancement and death messages allowed? (currently not functional) |
 
 1. default, as in it's the value generated with the file
 2. fallback, as in if the key isn't found, this value will be used instead
