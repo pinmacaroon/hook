@@ -1,7 +1,6 @@
 package com.github.pinmacaroon.dchook.util;
 
 import com.github.pinmacaroon.dchook.Hook;
-import com.github.pinmacaroon.dchook.conf.ModConfigs;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
@@ -12,9 +11,6 @@ import java.net.http.HttpResponse;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import static com.github.pinmacaroon.dchook.Hook.*;
@@ -151,7 +147,7 @@ public class PromotionProvider {
         embed.addProperty("url", "https://pinmacaroon.github.io/hook/docs.html");
 
         embed.addProperty("description", """
-                oh noes! you couldnt figure out how to use the mod? i got your back! go to
+                oh noes! you couldn't figure out how to use the mod? i got your back! go to
                  <https://pinmacaroon.github.io/hook/docs.html> and see the table with the configuration keys and
                  values! this page will be your hub for updates and information concerning the mod.""");
 
@@ -199,6 +195,10 @@ public class PromotionProvider {
         return embed;
     }
 
+    /**
+     * @param embeds {@link JsonArray} of {@link JsonObject} which are discord embeds
+     * @param webhook {@link URI} of the webhook api endpoint
+     */
     public static void sendPromotion(JsonArray embeds, URI webhook){
 
         JsonObject request_body = new JsonObject();
@@ -213,18 +213,21 @@ public class PromotionProvider {
 
         try {
             var response = HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get();
-            LOGGER.info(String.valueOf(response.statusCode()));
-            LOGGER.info(request_body.toString());
+            LOGGER.debug(String.valueOf(response.statusCode()));
+            LOGGER.debug(request_body.toString());
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.warn(e.getMessage());
             throw new RuntimeException(e);
         }
 
     }
 
+    /**
+     * @return {@link JsonObject} of the single promotion embed, or a {@code null} if the gods decide that the rng shall be more than 4
+     */
     public static @Nullable JsonObject automaticPromotionSelector(){
         int id = Hook.RANDOM.nextInt(0, 5);
-        LOGGER.info(String.valueOf(id));
+        LOGGER.debug(String.valueOf(id));
         return switch (id) {
             case 0 -> getMcfetchPromotion();
             case 1 -> getOocMessageTip();
@@ -235,6 +238,9 @@ public class PromotionProvider {
         };
     }
 
+    /**
+     * @param webhook {@link URI} of the webhook api endpoint
+     */
     public static void sendAutomaticPromotion(URI webhook){
         JsonObject promotion = automaticPromotionSelector();
         if(promotion == null) return;
