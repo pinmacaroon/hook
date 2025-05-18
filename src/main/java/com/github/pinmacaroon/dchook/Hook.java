@@ -1,20 +1,20 @@
 package com.github.pinmacaroon.dchook;
 
+import com.github.pinmacaroon.dchook.bot.Bot;
 import com.github.pinmacaroon.dchook.conf.ModConfigs;
 import com.github.pinmacaroon.dchook.util.PromotionProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.api.DedicatedServerModInitializer;
-
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-//import org.json.simple.JSONObject;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -34,7 +34,12 @@ public class Hook implements DedicatedServerModInitializer {
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
 	public static final Random RANDOM = new Random(Instant.now().getEpochSecond());
 	public static final Pattern WEBHOOK_URL_PATTERN = Pattern.compile("^https:\\/\\/(ptb\\.|canary\\.)?discord\\.com\\/api\\/webhooks\\/\\d+\\/.+$");
+
+	public static volatile Bot BOT;
+	public static Thread BOT_THREAD;
 	//public static HttpClient HTTPCLIENT = HttpClient.newHttpClient();
+
+	public static MinecraftServer MINECRAFT_SERVER;
 
 	@Override
 	public void onInitializeServer() {
@@ -45,14 +50,24 @@ public class Hook implements DedicatedServerModInitializer {
 		TODO add promotion messages
 		TODO add two way chat with dicord4j
 		*/
-        ModConfigs.registerConfigs();
+		ModConfigs.registerConfigs();
 		if(!ModConfigs.FUNCTIONS_MODENABLED){
 			LOGGER.error("hook mod was explicitly told to not operate!");
 			return;
 		}
+
 		if(!WEBHOOK_URL_PATTERN.matcher(ModConfigs.WEBHOOK_URL).find()){
 			LOGGER.error("webhook url was not a valid discord api endpoint, thus the mod cant operate!");
 			return;
+		}
+		if(ModConfigs.FUNCTIONS_BOT_ENABLED){
+			try {
+				BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN);
+			} catch (Exception e){
+				e.printStackTrace();
+				LOGGER.error("couldnt initialise bot, two way chat disabled");
+				return;
+			}
 		}
 		HttpRequest get_webhook = HttpRequest.newBuilder()
 						.GET()
@@ -64,14 +79,25 @@ public class Hook implements DedicatedServerModInitializer {
 		try {
 			var response = HTTPCLIENT.send(get_webhook, HttpResponse.BodyHandlers.ofString());
 			int status = response.statusCode();
+			JsonObject body = new JsonParser().parse(response.body()).getAsJsonObject();
 			if(status != 200){
 				LOGGER.error(
 						"the webhook was not found or couldn't reach discord servers! discord said: '{}'",
-						new JsonParser().parse(response.body()).getAsJsonObject().get("message").getAsString()
+						body.get("message").getAsString()
 				);
 				return;
 			}
-		} catch (InterruptedException | IOException e) {
+			Thread thread = new Thread(() -> {
+                while (BOT == null) {
+                    Thread.onSpinWait();
+                }
+				BOT.setGUILD_ID(body.get("guild_id").getAsLong());
+				BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
+				BOT_THREAD = BOT.start();
+			});
+			thread.start();
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
         }
 
@@ -81,6 +107,7 @@ public class Hook implements DedicatedServerModInitializer {
 		}
 
 		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+			MINECRAFT_SERVER = server;
 			if (!ModConfigs.MESSAGES_SERVER_STARTING_ALLOWED) return;
 			HashMap<String, String> requestbody = new HashMap<>();
 			requestbody.put("content", ModConfigs.MESSAGES_SERVER_STARTING);
@@ -158,6 +185,9 @@ public class Hook implements DedicatedServerModInitializer {
 			} catch (InterruptedException | ExecutionException e) {
 				throw new RuntimeException(e);
 			}
+			if(BOT != null){
+				BOT.stop();
+			}
 		});
 
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
@@ -211,6 +241,7 @@ public class Hook implements DedicatedServerModInitializer {
 		});
 
 		ServerMessageEvents.GAME_MESSAGE.register((server, text, b) -> {
+			if(Text.translatable(text.getString()).getString().startsWith("<")) return;
 			HashMap<String, String> requestbody = new HashMap<>();
 			requestbody.put("content", Text.translatable(text.getString()).getString());
 			requestbody.put("username", "game");

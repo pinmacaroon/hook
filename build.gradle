@@ -11,6 +11,7 @@ base {
 }
 
 repositories {
+	mavenCentral()
 }
 
 fabricApi {
@@ -29,6 +30,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	//implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'com.discord4j:discord4j-core:3.2.7'
+	include "com.discord4j:discord4j-core:3.2.7"
 }
 
 processResources {
