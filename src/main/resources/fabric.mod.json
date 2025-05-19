@@ -12,8 +12,7 @@
 		"sources": "https://github.com/pinmacaroon/hook"
 	},
 	"license": "MIT",
-	"icon": "assets/dchook/icon.png",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"server": [
 			"com.github.pinmacaroon.dchook.Hook"

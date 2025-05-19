@@ -257,8 +257,8 @@ public class Hook implements DedicatedServerModInitializer {
 			//LOGGER.info(GSON.toJson(requestbody));
 
 			try {
-				//HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
-				LOGGER.info(HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body());
+				HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
+				//LOGGER.info(HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body());
 			} catch (InterruptedException | ExecutionException e) {
 				throw new RuntimeException(e);
 			}

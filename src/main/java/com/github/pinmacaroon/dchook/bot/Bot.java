@@ -11,14 +11,20 @@ import reactor.core.publisher.Mono;
 import java.text.MessageFormat;
 
 public class Bot {
-    private DiscordClient CLIENT;
+    private final DiscordClient CLIENT;
     private GatewayDiscordClient GATEWAY_CLIENT;
     private long GUILD_ID;
     private long CHANNEL_ID;
+    private final char PREFIX;
+
+    public Bot(String token, char prefix){
+        this.CLIENT = DiscordClient.create(token);
+        this.PREFIX = prefix;
+    }
 
     public Bot(String token){
         this.CLIENT = DiscordClient.create(token);
-
+        this.PREFIX = '$';
     }
 
     public DiscordClient getCLIENT() {
@@ -87,5 +93,9 @@ public class Bot {
 
     public void setCHANNEL_ID(long CHANNEL_ID) {
         this.CHANNEL_ID = CHANNEL_ID;
+    }
+
+    public char getPREFIX() {
+        return PREFIX;
     }
 }
