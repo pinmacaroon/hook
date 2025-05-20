@@ -9,6 +9,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.util.Permission;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModEnvironment;
 import net.minecraft.text.MutableText;
@@ -98,7 +99,9 @@ public class Messenger {
                         * `time`, aka `weather`: get current overworld time and weather info
                         * `mods`: list all the required mods in the server (might be inaccurate)
                         * `test`: idk, testing command
-                        * `skin <username>`: get the skin of a given user""";
+                        * `skin <username>`: get the skin of a given user
+                        * `console "<command>"`: execute a game command as op (needs discord admin privileges)(probably\
+                        broken)""";
                 restChannel.createMessage(response).block();
                 return;
             } else if (arguments.get(0).equals(prefix + "skin") && arguments.size() == 2) {
@@ -112,6 +115,18 @@ public class Messenger {
                                 .build().asRequest())
                         .build();
                 restChannel.createMessage(data).block();
+                return;
+            } else if (arguments.get(0).equals(prefix + "console") && arguments.size() == 2) {
+                if(!message.getGuild().block().getMemberById(message.getAuthor().get().getId()).block()
+                        .getBasePermissions().block().contains(Permission.ADMINISTRATOR)){
+                    restChannel.createMessage("Not enough permission!").block();
+                    return;
+                }
+                Hook.MINECRAFT_SERVER.getCommandManager().executeWithPrefix(
+                        Hook.MINECRAFT_SERVER.getCommandSource(),
+                        arguments.get(1).toString()
+                );
+                restChannel.createMessage("Command execution attempted! See console for output!").block();
                 return;
             }
             return;

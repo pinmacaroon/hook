@@ -62,10 +62,10 @@ public class Hook implements DedicatedServerModInitializer {
 		}
 		if(ModConfigs.FUNCTIONS_BOT_ENABLED){
 			try {
-				BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN);
+				BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN, ModConfigs.FUNCTIONS_BOT_PREFIX.toCharArray()[0]);
 			} catch (Exception e){
 				e.printStackTrace();
-				LOGGER.error("couldnt initialise bot, two way chat disabled");
+				LOGGER.error("couldn't initialise bot, two way chat disabled");
 				return;
 			}
 		}
