@@ -6,6 +6,8 @@ import com.github.pinmacaroon.dchook.util.TimeConverter;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModEnvironment;
@@ -26,6 +28,14 @@ public class Messenger {
     public static final Pattern EMOJI_PATTERN = Pattern.compile("<:([A-Za-z0-9_]{2,}):(\\d+)>");
 
     public static void handeMessage(MessageCreateEvent messageCreateEvent, Bot bot) {
+        if(messageCreateEvent.getMessage().getUserMentions().contains(bot.getGATEWAY_CLIENT().getSelf().block())){
+            RestChannel restChannel = bot.getGATEWAY_CLIENT().rest()
+                    .getChannelById(messageCreateEvent.getMessage().getChannelId());
+            restChannel.createMessage(String.format("-# Heya, my current prefix is `%s`!",
+                        bot.getPREFIX()
+                    )
+            ).block();
+        }
         if (messageCreateEvent.getMessage().getContent()
                 .strip()
                 .startsWith(Character.toString(bot.getPREFIX()))
@@ -37,8 +47,7 @@ public class Messenger {
             System.out.println(arguments);
 
             if (arguments.get(0).equals(prefix + "test")) {
-                restChannel.createMessage(String.format(
-                                """
+                restChannel.createMessage(String.format("""
                                         The command you operated was a test command! The test was successful!\
                                         Current version is %s!""",
                                 Hook.VERSION
@@ -81,6 +90,28 @@ public class Messenger {
                 });
                 String response = "The server currently has **" + mods.get() + "** required mods:\n" + mod_list;
                 restChannel.createMessage(response).block();
+                return;
+            } else if (arguments.get(0).equals(prefix + "help")) {
+                String response = """
+                        Every command needs the prefix before its name!
+                        * `list`: list online players
+                        * `time`, aka `weather`: get current overworld time and weather info
+                        * `mods`: list all the required mods in the server (might be inaccurate)
+                        * `test`: idk, testing command
+                        * `skin <username>`: get the skin of a given user""";
+                restChannel.createMessage(response).block();
+                return;
+            } else if (arguments.get(0).equals(prefix + "skin") && arguments.size() == 2) {
+
+                MessageCreateRequest data = MessageCreateRequest.builder()
+                        .content("Skin of "+arguments.get(1).toString()+":")
+                        .addEmbed(EmbedCreateSpec.builder()
+                                .image("https://crafthead.net/skin/"+arguments.get(1).toString())
+                                .footer(
+                                        "get a closer look at <https://pinmacaroon.github.io/skinfetch/index.html>", "")
+                                .build().asRequest())
+                        .build();
+                restChannel.createMessage(data).block();
                 return;
             }
             return;

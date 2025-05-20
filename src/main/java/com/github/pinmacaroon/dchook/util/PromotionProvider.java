@@ -54,6 +54,44 @@ public class PromotionProvider {
         return embed;
     }
 
+    public static JsonObject getSkinfetchPromotion(){
+        JsonObject embed = new JsonObject();
+
+        embed.addProperty("url", "https://pinmacaroon.github.io/skinfetch/index.html");
+
+        embed.addProperty("type", "rich");
+
+        embed.addProperty("title", "skinfetch: quickly take a look at one's current skin");
+
+        embed.addProperty("description", """
+                a small and simple web tool to quickly get a view of a user's skin "from multiple angles"! choose from\
+                multiple modes, including but not limited to bust, body, head, skin! toggle the outer layer if you\
+                wish! choose a size (in pixels) and boom! just click on it and download the image!""");
+
+        embed.addProperty("color", 15448355);
+
+        JsonArray fields = new JsonArray();
+        JsonObject field1 = new JsonObject();
+        field1.addProperty("value", "gaze upon your fabulous look from your browser now at this link: " +
+                "<https://pinmacaroon.github.io/skinfetch/index.html>");
+        field1.addProperty("name", "interested?");
+        fields.add(field1);
+        embed.add("fields", fields);
+
+        JsonObject author = new JsonObject();
+        author.addProperty("name", "skinfetch");
+        author.addProperty("url", "https://pinmacaroon.github.io/skinfetch/index.html");
+        embed.add("author", author);
+
+        embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
+
+        JsonObject footer = new JsonObject();
+        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
+                "if you wish to turn this off, go to the configuration file!");
+        embed.add("footer", footer);
+        return embed;
+    }
+
     public static JsonObject getSequoiaPromotion(){
         JsonObject embed = new JsonObject();
 
@@ -226,7 +264,7 @@ public class PromotionProvider {
      * @return {@link JsonObject} of the single promotion embed, or a {@code null} if the gods decide that the rng shall be more than 4
      */
     public static @Nullable JsonObject automaticPromotionSelector(){
-        int id = Hook.RANDOM.nextInt(0, 5);
+        int id = Hook.RANDOM.nextInt(0, 10);
         LOGGER.debug(String.valueOf(id));
         return switch (id) {
             case 0 -> getMcfetchPromotion();
@@ -234,6 +272,7 @@ public class PromotionProvider {
             case 2 -> getSequoiaPromotion();
             case 3 -> getDocumentationTip();
             case 4 -> getHydrationTip();
+            case 5 -> getSkinfetchPromotion();
             default -> null;
         };
     }
