@@ -3,9 +3,10 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.guardsquare:proguard-gradle:7.1.0'
+		classpath 'com.guardsquare:proguard-gradle:7.7.0'
 	}
 }
+
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
@@ -50,6 +51,7 @@ dependencies {
 
 	 */
 	extraLibs group: 'com.discord4j', name: 'discord4j-core', version: '3.2.7'
+	testImplementation('com.guardsquare:proguard-gradle:7.7.0')
 
 	configurations.implementation.extendsFrom(configurations.extraLibs)
 }
@@ -78,7 +80,7 @@ java {
 
 jar {
 
-	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	inputs.property "archivesName", project.base.archivesName
 
 	/*
@@ -112,4 +114,34 @@ publishing {
 
 		//implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	}
+}
+/*
+task myProguardTask(type: proguard.gradle.ProGuardTask) {
+	.....
+}
+
+ */
+ext.baseCoordinates = "${project.name}-${project.version}"
+
+tasks.register('proguard', proguard.gradle.ProGuardTask) {
+	configuration file('proguard.pro')
+
+	injars(tasks.named('jar', Jar).flatMap { it.archiveFile })
+
+	// Automatically handle the Java version of this build.
+	if (System.getProperty('java.version').startsWith('1.')) {
+		// Before Java 9, the runtime classes were packaged in a single jar file.
+		libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+	} else {
+		// As of Java 9, the runtime classes are packaged in modular jmod files.
+		libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+		//libraryjars "${System.getProperty('java.home')}/jmods/....."
+	}
+
+	// This will include the Kotlin library jars
+	libraryjars sourceSets.main.compileClasspath
+
+	verbose
+
+	outjars(layout.buildDirectory.file("libs/${baseCoordinates}-minified.jar"))
 }

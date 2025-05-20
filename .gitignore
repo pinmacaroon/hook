@@ -38,3 +38,7 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+/JarShrink_v1.1.zip
+/proguard.pro
+/proguard-7.7.0.zip
+/proguard-7.7.0/
