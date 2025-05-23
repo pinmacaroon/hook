@@ -22,6 +22,7 @@ public class WaypointParser {
      */
     public static List<Object> constructWaypointFromString(String text) {
         Matcher matcher = WAYPOINT_PATTERN.matcher(text);
+        //noinspection ResultOfMethodCallIgnored
         matcher.matches();
         return List.of(
                 matcher.group(1),

@@ -25,17 +25,18 @@ public class PromotionProvider {
 
         embed.addProperty("title", "mcfetch: see minecraft server stats without starting the game!");
 
-        embed.addProperty("description", "a **simple**, **easy to use** and **minimal tool** " +
-                "to see who are online on your favorite servers! **no download** needed, **no login** needed! " +
-                "**no ads** and no restrictions!\nall you need to get server information is the **IP** address " +
-                "of the server!");
+        embed.addProperty("description", """
+                                a **simple**, **easy to use** and **minimal tool** to see who are online on your \
+                                favorite servers! **no download** needed, **no login** needed! **no ads** and no \
+                                restrictions! all you need to get server information is the **IP** address of the \
+                                server!""");
 
         embed.addProperty("color", 15448355);
 
         JsonArray fields = new JsonArray();
         JsonObject field1 = new JsonObject();
-        field1.addProperty("value", "start using it right now at this link: " +
-                "<https://pinmacaroon.github.io/mcfetch/legacy/index.html>");
+        field1.addProperty("value", """
+                start using it right now at this link: <https://pinmacaroon.github.io/mcfetch/legacy/index.html>""");
         field1.addProperty("name", "interested?");
         fields.add(field1);
         embed.add("fields", fields);
@@ -45,11 +46,14 @@ public class PromotionProvider {
         author.addProperty("url", "https://pinmacaroon.github.io/mcfetch/legacy/index.html");
         embed.add("author", author);
 
-        embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
+        embed.addProperty("timestamp",
+                ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
+        );
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
         embed.add("footer", footer);
         return embed;
     }
@@ -64,16 +68,17 @@ public class PromotionProvider {
         embed.addProperty("title", "skinfetch: quickly take a look at one's current skin");
 
         embed.addProperty("description", """
-                a small and simple web tool to quickly get a view of a user's skin "from multiple angles"! choose from\
-                multiple modes, including but not limited to bust, body, head, skin! toggle the outer layer if you\
+                a small and simple web tool to quickly get a view of a user's skin "from multiple angles"! choose from \
+                multiple modes, including but not limited to bust, body, head, skin! toggle the outer layer if you \
                 wish! choose a size (in pixels) and boom! just click on it and download the image!""");
 
         embed.addProperty("color", 15448355);
 
         JsonArray fields = new JsonArray();
         JsonObject field1 = new JsonObject();
-        field1.addProperty("value", "gaze upon your fabulous look from your browser now at this link: " +
-                "<https://pinmacaroon.github.io/skinfetch/index.html>");
+        field1.addProperty("value", """
+                gaze upon your fabulous look from your browser now at this link: \
+                <https://pinmacaroon.github.io/skinfetch/index.html>""");
         field1.addProperty("name", "interested?");
         fields.add(field1);
         embed.add("fields", fields);
@@ -86,8 +91,9 @@ public class PromotionProvider {
         embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
         embed.add("footer", footer);
         return embed;
     }
@@ -101,8 +107,9 @@ public class PromotionProvider {
 
         embed.addProperty("title", "Sequoia: Adds a really nice biome with some really tall trees!");
 
-        embed.addProperty("description", "A mod that adds the amazing sequoia forests! Custom " +
-                "tree types, blocks, structures!");
+        embed.addProperty("description", """
+                A mod that adds the amazing sequoia forests! Custom \
+                tree types, blocks, structures!""");
 
         embed.addProperty("color", 15448355);
 
@@ -120,8 +127,8 @@ public class PromotionProvider {
 
         JsonObject field2 = new JsonObject();
         field2.addProperty("value", """
-                Fresh air, big trees. Really beautiful place to set up camp.\
-                 You can even find berry bushes! You can find three types of sequoia trees:
+                Fresh air, big trees. Really beautiful place to set up camp. \
+                You can even find berry bushes! You can find three types of sequoia trees:
                 * small
                 * medium size
                 * huge (structure, to be added)""");
