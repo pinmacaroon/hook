@@ -113,6 +113,7 @@ public class PromotionProvider {
 
         embed.addProperty("color", 15448355);
 
+        //noinspection ExtractMethodRecommender
         JsonArray fields = new JsonArray();
 
         JsonObject field1 = new JsonObject();
@@ -140,20 +141,21 @@ public class PromotionProvider {
         JsonObject author = new JsonObject();
         author.addProperty("name", "Sequoia");
         author.addProperty("url", "https://modrinth.com/mod/sequoia-pine");
-        author.addProperty("icon_url", "https://cdn.modrinth.com/data/GYYIncFH/2fabee293b4be237825df51" +
-                "defe3b977058d31e7.png");
+        author.addProperty("icon_url",
+                "https://cdn.modrinth.com/data/GYYIncFH/2fabee293b4be237825df51defe3b977058d31e7.png");
         embed.add("author", author);
 
         JsonObject image = new JsonObject();
-        image.addProperty("url", "https://cdn.modrinth.com/data/GYYIncFH/images/5dd0848d40469d0dd4767" +
-                "c73ac926e112978645d.jpeg");
+        image.addProperty("url",
+                "https://cdn.modrinth.com/data/GYYIncFH/images/5dd0848d40469d0dd4767c73ac926e112978645d.jpeg");
         embed.add("image", image);
 
         embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
 
         embed.add("footer", footer);
         return embed;
@@ -166,8 +168,9 @@ public class PromotionProvider {
 
         embed.addProperty("title", "out of character messages");
 
-        embed.addProperty("description", "make messages hidden from the mod by ending it with `//`!" +
-                " it wont get transferred to Discord! you can configure this in the config file!");
+        embed.addProperty("description", """
+                            make messages hidden from the mod by ending it with `//`! it wont get transferred to \
+                            Discord! you can configure this in the config file!""");
 
         JsonObject author = new JsonObject();
         author.addProperty("name", "tips and hints");
@@ -176,8 +179,9 @@ public class PromotionProvider {
         embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
         embed.add("footer", footer);
         return embed;
     }
@@ -192,8 +196,8 @@ public class PromotionProvider {
         embed.addProperty("url", "https://pinmacaroon.github.io/hook/docs.html");
 
         embed.addProperty("description", """
-                oh noes! you couldn't figure out how to use the mod? i got your back! go to
-                 <https://pinmacaroon.github.io/hook/docs.html> and see the table with the configuration keys and
+                oh noes! you couldn't figure out how to use the mod? i got your back! go to\
+                 <https://pinmacaroon.github.io/hook/docs.html> and see the table with the configuration keys and\
                  values! this page will be your hub for updates and information concerning the mod.""");
 
         JsonObject author = new JsonObject();
@@ -207,8 +211,9 @@ public class PromotionProvider {
         embed.add("image", image);
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
         embed.add("footer", footer);
         return embed;
     }
@@ -234,8 +239,29 @@ public class PromotionProvider {
         embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
 
         JsonObject footer = new JsonObject();
-        footer.addProperty("text", "this was a promotion of first-party services or a tip message! " +
-                "if you wish to turn this off, go to the configuration file!");
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
+        embed.add("footer", footer);
+        return embed;
+    }
+
+    public static JsonObject getCar(){
+        JsonObject embed = new JsonObject();
+
+        embed.addProperty("type", "rich");
+
+        JsonObject image = new JsonObject();
+        image.addProperty("url",
+                "https://pinmacaroon.github.io/kocsi.gif");
+        embed.add("image", image);
+
+        embed.addProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
+
+        JsonObject footer = new JsonObject();
+        footer.addProperty("text", """
+                this was a promotion of first-party services or a tip message! \
+                if you wish to turn this off, go to the configuration file!""");
         embed.add("footer", footer);
         return embed;
     }
@@ -245,7 +271,6 @@ public class PromotionProvider {
      * @param webhook {@link URI} of the webhook api endpoint
      */
     public static void sendPromotion(JsonArray embeds, URI webhook){
-
         JsonObject request_body = new JsonObject();
         request_body.addProperty("username", "promotion");
         request_body.add("embeds", embeds);
@@ -257,18 +282,16 @@ public class PromotionProvider {
                 .build();
 
         try {
-            var response = HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get();
-            LOGGER.debug(String.valueOf(response.statusCode()));
-            LOGGER.debug(request_body.toString());
+            HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get();
         } catch (InterruptedException | ExecutionException e) {
             LOGGER.warn(e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 
     /**
-     * @return {@link JsonObject} of the single promotion embed, or a {@code null} if the gods decide that the rng shall be more than 4
+     * @return {@link JsonObject} of the single promotion embed, or a {@code null} if the gods decide that the rng shall
+     * be more than 6
      */
     public static @Nullable JsonObject automaticPromotionSelector(){
         int id = Hook.RANDOM.nextInt(0, 10);
@@ -280,6 +303,7 @@ public class PromotionProvider {
             case 3 -> getDocumentationTip();
             case 4 -> getHydrationTip();
             case 5 -> getSkinfetchPromotion();
+            case 6 -> getCar();
             default -> null;
         };
     }

@@ -35,7 +35,7 @@ public class Hook implements DedicatedServerModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final HttpClient HTTPCLIENT = HttpClient.newHttpClient();
 	public static final Gson GSON = new GsonBuilder().create();
-	public static final String VERSION = "0.3.0-alpha6+build.1";
+	public static final String VERSION = "0.3.0";
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
 	public static final Random RANDOM = new Random(Instant.now().getEpochSecond());
 	@SuppressWarnings("RegExpRedundantEscape")

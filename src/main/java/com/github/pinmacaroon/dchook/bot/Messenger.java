@@ -22,8 +22,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// im not fixing this shit, this is Pandora's box, don't touch it. thanks to the gods of Olympus for allowing this
+// forsaken class to operate
+
 public class Messenger {
     public static final Pattern MENTION_PATTERN = Pattern.compile("<(@)(\\d+)>");
+    //TODO fix role pattern not working
     public static final Pattern ROLE_PATTERN = Pattern.compile("<(@&)(\\d+)>");
     public static final Pattern CHANNEL_PATTERN = Pattern.compile("<(#)(\\d+)>");
     public static final Pattern EMOJI_PATTERN = Pattern.compile("<:([A-Za-z0-9_]{2,}):(\\d+)>");

@@ -33,7 +33,7 @@ public class Bot {
 
     @Nullable
     public Thread start(){
-        //Hook.MINECRAFT_SERVER.getPlayerManager().broadcast(Text.of("test"), false);
+        //TODO fix possible race condition so that the bot doesn't start with nonexistent ids
         /*
         if(GUILD_ID == 0){
             return null;

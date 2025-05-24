@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public class ModConfigProvider implements SimpleConfig.DefaultConfig {
 
     private String configContents = "";

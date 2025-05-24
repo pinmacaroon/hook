@@ -2,10 +2,8 @@ package com.github.pinmacaroon.dchook.bot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class CommandParser {
-    private static final Pattern NON_APPEND = Pattern.compile("[^\"|^\\s]");
 
     public static List<Object> parseString(String source) {
         List<String> parsed = new ArrayList<>();
@@ -24,7 +22,7 @@ public class CommandParser {
                     holder.setLength(0);
                     capture = true;
                 }
-            } else if (i == ' ') {
+            } else {
                 if (capture) {
                     holder.append(i);
                 } else {

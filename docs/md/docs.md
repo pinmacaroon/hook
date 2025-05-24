@@ -1,5 +1,25 @@
 # dchook documentation
 
+## Table of contents
+
+1. [Table of contents](#table-of-contents)
+2. [Legal](#legal)
+3. [`dchook.properties`](#dchookproperties)
+   1. [Syntax](#syntax)
+   2. [Keys](#keys)
+4. [Features](#features)
+   1. [OOC Messages](#ooc-messages)
+   2. [Two-Way Hook](#two-way-hook)
+   3. [Xaero's World Map support](#xaeros-world-map-support)
+5. [Setup](#setup)
+   1. [One-Way Mode](#one-way-mode)
+   2. [Two-Way Mode](#two-way-mode)
+6. ["HELP, IT AINT WORKIN', WHAT AM I SUPPOSD' TO DO?"](#help-it-aint-workin-what-am-i-supposd-to-do)
+
+## Legal
+
+The software itself is licensed under the MIT license. Dependencies' licence may vary. Please read the Terms of Service before using the software!
+
 ## `dchook.properties`
 
 `dchook.properties` is a configuration file generated to and expected from the `/config/` directory of your server root. If it's not found, it will be generated using default values.
@@ -27,24 +47,24 @@ messages.server.starting.allowed=true
 
 ### Keys
 
-| parameter key | default[1] | fallback[2] | use |
-| --- | --- | --- | --- |
-| functions.mod_enabled | true | false | enables/disables the mod's functionality |
-| functions.allow_ooc_messages | true | false | allow players to be ignored from proxying if their message ends with double slashes? |
-| functions.promotions.enabled | true | false | are tips and hints/promotion embeds allowed to be sent to Discord |
-| functions.bot.enabled | true | false | is two-way chat (the bot) enabled? |
-| functions.bot.token | "TOKEN" | (blank string) | bot token |
-| functions.bot.prefix | $ | $ | bot command prefix |
-| webhook.url | <https://discord.com/api/webhooks/000/ABCDEF> | (blank string) | url of webhook |
-| messages.server.starting | The server is starting! | messages.server.starting | start message |
-| messages.server.stopped | The server has been stopped! | messages.server.stopped | stop message |
-| messages.server.started | The server has started! | messages.server.started | opened/fully started message |
-| messages.server.stopping | The server is stopping! | messages.server.stopping | stopping message |
-| messages.server.starting.allowed | true | false | start message allowed? |
-| messages.server.stopped.allowed | true | false | stop message allowed? |
-| messages.server.started.allowed | true | false | opened/fully started message |
-| messages.server.stopping.allowed | true | false | stopping message allowed? |
-| messages.server.game.allowed | true | false | default leave/join, advancement and death messages allowed? (currently not functional) |
+| parameter key                    | default[1]                                    | fallback[2]              | use                                                                                    |
+|----------------------------------|-----------------------------------------------|--------------------------|----------------------------------------------------------------------------------------|
+| functions.mod_enabled            | true                                          | false                    | enables/disables the mod's functionality                                               |
+| functions.allow_ooc_messages     | true                                          | false                    | allow players to be ignored from proxying if their message ends with double slashes?   |
+| functions.promotions.enabled     | true                                          | false                    | are tips and hints/promotion embeds allowed to be sent to Discord                      |
+| functions.bot.enabled            | true                                          | false                    | is two-way chat (the bot) enabled?                                                     |
+| functions.bot.token              | "TOKEN"                                       | (blank string)           | bot token                                                                              |
+| functions.bot.prefix             | $                                             | $                        | bot command prefix                                                                     |
+| webhook.url                      | <https://discord.com/api/webhooks/000/ABCDEF> | (blank string)           | url of webhook                                                                         |
+| messages.server.starting         | The server is starting!                       | messages.server.starting | start message                                                                          |
+| messages.server.stopped          | The server has been stopped!                  | messages.server.stopped  | stop message                                                                           |
+| messages.server.started          | The server has started!                       | messages.server.started  | opened/fully started message                                                           |
+| messages.server.stopping         | The server is stopping!                       | messages.server.stopping | stopping message                                                                       |
+| messages.server.starting.allowed | true                                          | false                    | start message allowed?                                                                 |
+| messages.server.stopped.allowed  | true                                          | false                    | stop message allowed?                                                                  |
+| messages.server.started.allowed  | true                                          | false                    | opened/fully started message                                                           |
+| messages.server.stopping.allowed | true                                          | false                    | stopping message allowed?                                                              |
+| messages.server.game.allowed     | true                                          | false                    | default leave/join, advancement and death messages allowed? (currently not functional) |
 
 1. default, as in it's the value generated with the file
 2. fallback, as in if the key isn't found, this value will be used instead
@@ -58,6 +78,10 @@ Out-of-Character messages. Ending a message with double slashes (`//`) will tell
 ### Two-Way Hook
 
 Send a message in the desired Discord channel, and make that message appear in game!
+
+### Xaero's World Map support
+
+[Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) has a feature, with which you can share waypoint in chat for everyone to save and add. This will be converted to readable coordinates and dimension data when sent to Discord!
 
 ## Setup
 
@@ -118,3 +142,24 @@ Set the mod up:
 2. Change the value of `functions.bot.token` to your bot's token you copied in step 9 of the previous set of steps;
 3. Save the configuration file;
 4. Start the server again and type something in game and in your channel too, and see if your messages appear!
+
+## "HELP, IT AINT WORKIN', WHAT AM I SUPPOSD' TO DO?"
+
+Calm down, we'll go step by step.
+
+Check the config file.
+
+- Did I paste the URL to the right place?
+- Is it the right URL?
+- Did I delete an `=`?
+- Did I put an extra space somewhere?
+- Did I accidentally turn the mod off?
+
+Check the console of the server.
+
+- Did my server say something about the webhook not being a valid API endpoint?
+- Did my server say something about the webhook not being found or not having
+  connection to Discord?
+
+Still doesn't work? Well, I (pin, the one who made this mod) am also a "human",
+so I make mistakes too. If you think I made one, report it to me!

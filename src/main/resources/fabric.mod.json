@@ -16,9 +16,6 @@
 	"entrypoints": {
 		"server": [
 			"com.github.pinmacaroon.dchook.Hook"
-		],
-		"fabric-datagen": [
-			"com.github.pinmacaroon.dchook.HookDataGenerator"
 		]
 	},
 	"mixins": [

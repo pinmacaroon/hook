@@ -9,7 +9,6 @@ public class ModConfigs {
     public static SimpleConfig CONFIG;
     private static ModConfigProvider configs;
 
-    // TODO optimize webhook url
     public static String WEBHOOK_URL;
     public static String MESSAGES_SERVER_STARTING;
     public static String MESSAGES_SERVER_STOPPED;
