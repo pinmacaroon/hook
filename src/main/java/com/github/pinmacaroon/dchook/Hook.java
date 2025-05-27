@@ -34,7 +34,6 @@ public class Hook implements DedicatedServerModInitializer {
             .setMajorVersion(0)
             .setMinorVersion(3)
             .setPatchVersion(1)
-            .setPreReleaseVersion("beta", "1")
             .setBuildMetadata("fabric")
             .build();
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
@@ -111,7 +110,7 @@ public class Hook implements DedicatedServerModInitializer {
 			throw new RuntimeException(e);
         }
 
-		VersionChecker.checkVersion();
+		if(ModConfigs.FUNCTIONS_UPDATE) VersionChecker.checkVersion();
 
 		LOGGER.info("all checks succeeded, starting webhook managing! version: {}", VERSION);
 		if(!ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED){

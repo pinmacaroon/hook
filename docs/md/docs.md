@@ -55,6 +55,7 @@ messages.server.starting.allowed=true
 | functions.bot.enabled            | true                                          | false                    | is two-way chat (the bot) enabled?                                                     |
 | functions.bot.token              | "TOKEN"                                       | (blank string)           | bot token                                                                              |
 | functions.bot.prefix             | $                                             | $                        | bot command prefix                                                                     |
+| functions.update                 | true                                          | false                    | auto check for updates                                                                 |
 | webhook.url                      | <https://discord.com/api/webhooks/000/ABCDEF> | (blank string)           | url of webhook                                                                         |
 | messages.server.starting         | The server is starting!                       | messages.server.starting | start message                                                                          |
 | messages.server.stopped          | The server has been stopped!                  | messages.server.stopped  | stop message                                                                           |
@@ -81,7 +82,7 @@ Send a message in the desired Discord channel, and make that message appear in g
 
 ### Xaero's World Map support
 
-[Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) has a feature, with which you can share waypoint in chat for everyone to save and add. This will be converted to readable coordinates and dimension data when sent to Discord!
+[Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) has a feature, with which you can share waypoints in chat for everyone to save and add. This will be converted to readable coordinates and dimension data when sent to Discord!
 
 ## Setup
 
