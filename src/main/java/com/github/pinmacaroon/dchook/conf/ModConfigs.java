@@ -28,6 +28,8 @@ public class ModConfigs {
     public static String FUNCTIONS_BOT_TOKEN;
     public static String FUNCTIONS_BOT_PREFIX;
 
+    public static boolean FUNCTIONS_UPDATE;
+
     public static void registerConfigs() {
         configs = new ModConfigProvider();
         createConfigs();
@@ -48,6 +50,7 @@ public class ModConfigs {
         configs.addKeyValuePair(new Pair<>("functions.bot.enabled", true), "is two-way chat (the bot) enabled?");
         configs.addKeyValuePair(new Pair<>("functions.bot.token", "TOKEN"), "bot token");
         configs.addKeyValuePair(new Pair<>("functions.bot.prefix", "$"), "bot command prefix");
+        configs.addKeyValuePair(new Pair<>("functions.update", true), "check for updates");
         configs.addBlankLine();
 
         configs.addDocumentationLine("Configure Discord connection related parameters:");
@@ -89,6 +92,8 @@ public class ModConfigs {
         FUNCTIONS_BOT_ENABLED = CONFIG.getOrDefault("functions.bot.enabled", false);
         FUNCTIONS_BOT_TOKEN = CONFIG.getOrDefault("functions.bot.token", "");
         FUNCTIONS_BOT_PREFIX = CONFIG.getOrDefault("functions.bot.prefix", "$");
+
+        FUNCTIONS_UPDATE = CONFIG.getOrDefault("functions.update", false);
 
         System.out.println("all " + configs.getConfigsList().size() + " have been set properly");
     }

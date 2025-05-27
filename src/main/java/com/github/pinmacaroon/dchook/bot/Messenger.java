@@ -9,7 +9,6 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.discordjson.json.MessageCreateRequest;
 import discord4j.rest.entity.RestChannel;
-import discord4j.rest.util.Permission;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModEnvironment;
 import net.minecraft.text.MutableText;
@@ -30,14 +29,14 @@ public class Messenger {
     //TODO fix role pattern not working
     public static final Pattern ROLE_PATTERN = Pattern.compile("<(@&)(\\d+)>");
     public static final Pattern CHANNEL_PATTERN = Pattern.compile("<(#)(\\d+)>");
-    public static final Pattern EMOJI_PATTERN = Pattern.compile("<:([A-Za-z0-9_]{2,}):(\\d+)>");
+    public static final Pattern EMOJI_PATTERN = Pattern.compile("<a?:([A-Za-z0-9_]{2,}):(\\d+)>");
 
     public static void handeMessage(MessageCreateEvent messageCreateEvent, Bot bot) {
-        if(messageCreateEvent.getMessage().getUserMentions().contains(bot.getGATEWAY_CLIENT().getSelf().block())){
+        if (messageCreateEvent.getMessage().getUserMentions().contains(bot.getGATEWAY_CLIENT().getSelf().block())) {
             RestChannel restChannel = bot.getGATEWAY_CLIENT().rest()
                     .getChannelById(messageCreateEvent.getMessage().getChannelId());
             restChannel.createMessage(String.format("-# Heya, my current prefix is `%s`!",
-                        bot.getPREFIX()
+                            bot.getPREFIX()
                     )
             ).block();
         }
@@ -49,7 +48,6 @@ public class Messenger {
             String prefix = Character.toString(bot.getPREFIX());
             Message message = messageCreateEvent.getMessage();
             RestChannel restChannel = bot.getGATEWAY_CLIENT().rest().getChannelById(message.getChannelId());
-            System.out.println(arguments);
 
             if (arguments.get(0).equals(prefix + "test")) {
                 restChannel.createMessage(String.format("""
@@ -63,10 +61,10 @@ public class Messenger {
                 StringBuilder player_list = new StringBuilder();
                 player_list.append("""
                         There are currently **%d**/%d players online:\s""".formatted(
-                        Hook.MINECRAFT_SERVER.getPlayerManager().getCurrentPlayerCount(),
-                        Hook.MINECRAFT_SERVER.getPlayerManager().getMaxPlayerCount()
+                        Hook.getMinecraftServer().getPlayerManager().getCurrentPlayerCount(),
+                        Hook.getMinecraftServer().getPlayerManager().getMaxPlayerCount()
                 ));
-                Hook.MINECRAFT_SERVER.getPlayerManager().getPlayerList().forEach(
+                Hook.getMinecraftServer().getPlayerManager().getPlayerList().forEach(
                         serverPlayerEntity ->
                                 player_list.append("`").append(serverPlayerEntity.getName().getString()).append("` ")
                 );
@@ -74,11 +72,11 @@ public class Messenger {
                 return;
             } else if (arguments.get(0).equals(prefix + "time") || arguments.get(0).equals(prefix + "weather")) {
                 String response = "The current in-game time in the overworld is **" +
-                        TimeConverter.timeOfDayToHoursMinutes(Hook.MINECRAFT_SERVER.getOverworld().getTimeOfDay()) +
+                        TimeConverter.timeOfDayToHoursMinutes2(Hook.getMinecraftServer().getOverworld().getTimeOfDay()) +
                         "**! The weather is " +
-                        ((Hook.MINECRAFT_SERVER.getOverworld().isRaining()) ? "rainy" : "clear") +
+                        ((Hook.getMinecraftServer().getOverworld().isRaining()) ? "rainy" : "clear") +
                         "! " +
-                        ((Hook.MINECRAFT_SERVER.getOverworld().isThundering()) ? "It is thundering!" : "");
+                        ((Hook.getMinecraftServer().getOverworld().isThundering()) ? "It is thundering!" : "");
                 restChannel.createMessage(response).block();
                 return;
             } else if (arguments.get(0).equals(prefix + "mods")) {
@@ -103,40 +101,50 @@ public class Messenger {
                         * `time`, aka `weather`: get current overworld time and weather info
                         * `mods`: list all the required mods in the server (might be inaccurate)
                         * `test`: idk, testing command
-                        * `skin <username>`: get the skin of a given user
-                        * `console "<command>"`: execute a game command as op (needs discord admin privileges)(probably\
-                        broken)""";
+                        * `skin <username> [['avatar'|'helm'|'cube'|'body'|'bust'] ['true'|'false']]`: get the skin of \
+                        a given user. optional: select from a list of modes, and toggle outer layer""";
                 restChannel.createMessage(response).block();
                 return;
-            } else if (arguments.get(0).equals(prefix + "skin") && arguments.size() == 2) {
-
-                MessageCreateRequest data = MessageCreateRequest.builder()
-                        .content("Skin of "+arguments.get(1).toString()+":")
-                        .addEmbed(EmbedCreateSpec.builder()
-                                .image("https://crafthead.net/skin/"+arguments.get(1).toString())
-                                .footer(
-                                        "get a closer look at <https://pinmacaroon.github.io/skinfetch/index.html>", "")
-                                .build().asRequest())
-                        .build();
-                restChannel.createMessage(data).block();
-                return;
-            } else if (arguments.get(0).equals(prefix + "console") && arguments.size() == 2) {
-                if(!message.getGuild().block().getMemberById(message.getAuthor().get().getId()).block()
-                        .getBasePermissions().block().contains(Permission.ADMINISTRATOR)){
-                    restChannel.createMessage("Not enough permission!").block();
-                    return;
+            } else if (arguments.get(0).equals(prefix + "skin") && arguments.size() >= 2) {
+                MessageCreateRequest data;
+                if (arguments.size() >= 4) {
+                    if(arguments.get(2) == "helm" || arguments.get(2) == "avatar"){
+                        data = MessageCreateRequest.builder()
+                                .content("Skin of " + arguments.get(1).toString() + ":")
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .image("https://crafthead.net/"+ arguments.get(2) + "/" + arguments.get(1).toString())
+                                        .footer(
+                                                "get a closer look at https://pinmacaroon.github.io/skinfetch/index.html", "")
+                                        .build().asRequest())
+                                .build();
+                    } else {
+                        data = MessageCreateRequest.builder()
+                                .content("Skin of " + arguments.get(1).toString() + ":")
+                                .addEmbed(EmbedCreateSpec.builder()
+                                        .image("https://crafthead.net/" + (((boolean) arguments.get(3)) ? "armor/" : "")
+                                                + arguments.get(2) + "/" + arguments.get(1).toString())
+                                        .footer(
+                                                "get a closer look at https://pinmacaroon.github.io/skinfetch/index.html", "")
+                                        .build().asRequest())
+                                .build();
+                    }
+                } else {
+                    data = MessageCreateRequest.builder()
+                            .content("Skin of " + arguments.get(1).toString() + ":")
+                            .addEmbed(EmbedCreateSpec.builder()
+                                    .image("https://crafthead.net/skin/" + arguments.get(1).toString())
+                                    .footer(
+                                            "get a closer look at https://pinmacaroon.github.io/skinfetch/index.html", "")
+                                    .build().asRequest())
+                            .build();
                 }
-                Hook.MINECRAFT_SERVER.getCommandManager().executeWithPrefix(
-                        Hook.MINECRAFT_SERVER.getCommandSource(),
-                        arguments.get(1).toString()
-                );
-                restChannel.createMessage("Command execution attempted! See console for output!").block();
+                restChannel.createMessage(data).block();
                 return;
             }
             return;
         }
         if ((messageCreateEvent.getMessage().getChannelId().asLong() == bot.getCHANNEL_ID())
-                && (Hook.MINECRAFT_SERVER != null)) {
+                && (Hook.getMinecraftServer() != null)) {
             if (messageCreateEvent.getMessage().getAuthorAsMember().block() == null) {
                 return;
             }
@@ -214,6 +222,13 @@ public class Messenger {
                 }
             }
              */
+            //temp fix so that chat doesn't look ugly
+            matcher = ROLE_PATTERN.matcher(raw_message);
+            end = 0;
+            while (matcher.find(end)) {
+                raw_message = matcher.replaceFirst("[@role]");
+                end = matcher.end();
+            }
 
             MutableText signature;
             if (messageCreateEvent.getMessage().getMessageReference().isPresent()) {
@@ -245,7 +260,7 @@ public class Messenger {
             );
             MutableText formatted = signature.formatted(Formatting.BLUE)
                     .append(content);
-            Hook.MINECRAFT_SERVER.getPlayerManager().broadcast(formatted, false);
+            Hook.getMinecraftServer().getPlayerManager().broadcast(formatted, false);
         }
     }
 }
