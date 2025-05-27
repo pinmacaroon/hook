@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// im not fixing this shit, this is Pandora's box, don't touch it. thanks to the gods of Olympus for allowing this
+// im not fixing this shit, this is Pandora's box, don't touch it. thanks be to the gods of Olympus for allowing this
 // forsaken class to operate
 
 public class Messenger {
@@ -51,13 +51,13 @@ public class Messenger {
 
             if (arguments.get(0).equals(prefix + "test")) {
                 restChannel.createMessage(String.format("""
-                                        The command you operated was a test command! The test was successful!\
+                                        The command you operated was a test command! The test was successful! \
                                         Current version is %s!""",
                                 Hook.VERSION
                         )
                 ).block();
                 return;
-            } else if (arguments.get(0).equals(prefix + "list")) {
+            } else if (arguments.get(0).equals(prefix + "list") || arguments.get(0).equals(prefix + "l")) {
                 StringBuilder player_list = new StringBuilder();
                 player_list.append("""
                         There are currently **%d**/%d players online:\s""".formatted(
