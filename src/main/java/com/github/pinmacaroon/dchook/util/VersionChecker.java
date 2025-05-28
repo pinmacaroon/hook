@@ -58,6 +58,7 @@ public class VersionChecker {
             }
         } catch (Exception e) {
             Hook.LOGGER.error("{}:{}", e.getClass().getName(), e.getMessage());
+            return;
         }
     }
 }
