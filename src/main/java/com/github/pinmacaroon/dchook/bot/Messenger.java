@@ -97,7 +97,7 @@ public class Messenger {
             } else if (arguments.get(0).equals(prefix + "help")) {
                 String response = """
                         Every command needs the prefix before its name!
-                        * `list`: list online players
+                        * `list`, aka `l`: list online players
                         * `time`, aka `weather`: get current overworld time and weather info
                         * `mods`: list all the required mods in the server (might be inaccurate)
                         * `test`: idk, testing command

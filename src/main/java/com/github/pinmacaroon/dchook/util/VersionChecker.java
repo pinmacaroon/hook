@@ -18,7 +18,13 @@ public class VersionChecker {
                     .uri(URI.create("https://api.modrinth.com/v2/project/qJ9ZfKma/version"))
                     .build();
 
-            HttpResponse<String> response = Hook.HTTPCLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response;
+            try{
+                response = Hook.HTTPCLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+            } catch (Exception exception) {
+                Hook.LOGGER.error("{} : {}", exception.getClass().getName(), exception.getMessage());
+                return;
+            }
             int status = response.statusCode();
             JsonArray body = JsonParser.parseString(response.body()).getAsJsonArray();
             if(status != 200){
@@ -44,6 +50,7 @@ public class VersionChecker {
             }
             else if(Hook.VERSION.withoutBuildMetadata().isHigherThan(remoteVersion.get().withoutBuildMetadata())){
                 Hook.LOGGER.error("""
+						
 						!!!!!!!!!!!!!!!!!
 						you are running an unreleased version! please do not use this unless you know what you are \
 						doing

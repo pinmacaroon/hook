@@ -66,7 +66,6 @@ public class ModConfigs {
         configs.addKeyValuePair(new Pair<>("messages.server.stopped.allowed", true), "stop message allowed?");
         configs.addKeyValuePair(new Pair<>("messages.server.started.allowed", true), "opened/fully started message allowed?");
         configs.addKeyValuePair(new Pair<>("messages.server.stopping.allowed", true), "stopping message allowed?");
-        configs.addKeyValuePair(new Pair<>("messages.server.game.allowed", true), "default leave/join, advancement and death messages allowed?");
 
         configs.addBlankLine();
         configs.addDocumentationLine("Something didn't work? See the documentation or report an issue at this url: <" + Hook.DOCS_URL + ">!");
@@ -87,7 +86,6 @@ public class ModConfigs {
 
         FUNCTIONS_MODENABLED = CONFIG.getOrDefault("functions.mod_enabled", true);
         FUNCTIONS_PROMOTIONS_ENABLED = CONFIG.getOrDefault("functions.promotions.enabled", false);
-        //_ = CONFIG.getOrDefault("messages.server.game.allowed", false);
 
         FUNCTIONS_BOT_ENABLED = CONFIG.getOrDefault("functions.bot.enabled", false);
         FUNCTIONS_BOT_TOKEN = CONFIG.getOrDefault("functions.bot.token", "");
