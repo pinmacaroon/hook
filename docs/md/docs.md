@@ -18,7 +18,7 @@
 
 ## Legal
 
-The software itself is licensed under the MIT license. Dependencies' licence may vary. Please read the Terms of Service before using the software!
+The software itself is licensed under the MIT license. Dependencies' licence may vary. Please read the Discord Developer Terms of Service before using the software!
 
 ## `dchook.properties`
 
