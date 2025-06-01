@@ -11,4 +11,4 @@ This file is basically a checklist of things to do in the codebase.
 ## Implement
 
 * Performance improvements, don't know how yet
-* version checks with semver
+* rewrite using https://github.com/discord-jda/JDA because discord4j is ass

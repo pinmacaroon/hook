@@ -33,8 +33,9 @@ public class Hook implements DedicatedServerModInitializer {
 	public static final Version VERSION = new Version.Builder()
             .setMajorVersion(0)
             .setMinorVersion(3)
-            .setPatchVersion(1)
+            .setPatchVersion(2)
             .setBuildMetadata("fabric")
+			.setPreReleaseVersion("alpha", "6")
             .build();
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
 	public static final Random RANDOM = new Random(Instant.now().getEpochSecond());

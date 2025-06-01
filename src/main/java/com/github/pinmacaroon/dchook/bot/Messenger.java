@@ -15,6 +15,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,10 +52,22 @@ public class Messenger {
             RestChannel restChannel = bot.getGATEWAY_CLIENT().rest().getChannelById(message.getChannelId());
 
             if (arguments.get(0).equals(prefix + "test")) {
+                long size;
+                try {
+                    size = Files.walk(Hook.getMinecraftServer().getRunDirectory().toPath())
+                            .filter(p -> p.toFile().isFile())
+                            .mapToLong(p -> p.toFile().length())
+                            .sum()/1024/1024;
+                } catch (IOException e) {
+                    size = 0L;
+                }
                 restChannel.createMessage(String.format("""
-                                        The command you operated was a test command! The test was successful! \
-                                        Current version is %s!""",
-                                Hook.VERSION
+                                        The test was successful! `v:%s,m:%dmb/%dmb,g:%s,IP: %s:%d,s:%dmb`""",
+                                Hook.VERSION, (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/1024/1024,
+                                Runtime.getRuntime().totalMemory()/1024/1024,
+                                Hook.getMinecraftServer().getVersion(),
+                                Hook.getMinecraftServer().getServerIp(), Hook.getMinecraftServer().getServerPort(),
+                                size
                         )
                 ).block();
                 return;
@@ -86,12 +100,22 @@ public class Messenger {
                     if (modContainer.getMetadata().getEnvironment() == ModEnvironment.UNIVERSAL
                             && !modContainer.getMetadata().getType().equals("builtin")
                             && !modContainer.getMetadata().getId().startsWith("fabric")
-                            && !modContainer.getMetadata().getId().equals("mixinextras")) {
-                        mod_list.append("* ").append(modContainer.getMetadata().getName()).append("\n");
+                            && !modContainer.getMetadata().getId().equals("mixinextras")
+                            && modContainer.getContainingMod().isEmpty()) {
+                        mod_list.append(modContainer.getMetadata().getName()).append(' ')
+                                .append(modContainer.getMetadata().getVersion().getFriendlyString()).append('\n');
                         mods.getAndIncrement();
                     }
                 });
-                String response = "The server currently has **" + mods.get() + "** required mods:\n" + mod_list;
+                String response;
+                if (mods.get() == 0) {
+                    response = "The server currently has no required mods, you can join with a vanilla client!";
+                } else {
+                    response = "The server currently has " + mods.get() + " required mods:\n" + mod_list;
+                }
+                if (response.length() > 2000) {
+                    response = response.substring(0, 1995) + "[...]";
+                }
                 restChannel.createMessage(response).block();
                 return;
             } else if (arguments.get(0).equals(prefix + "help")) {
@@ -108,11 +132,11 @@ public class Messenger {
             } else if (arguments.get(0).equals(prefix + "skin") && arguments.size() >= 2) {
                 MessageCreateRequest data;
                 if (arguments.size() >= 4) {
-                    if(arguments.get(2) == "helm" || arguments.get(2) == "avatar"){
+                    if (arguments.get(2) == "helm" || arguments.get(2) == "avatar") {
                         data = MessageCreateRequest.builder()
                                 .content("Skin of " + arguments.get(1).toString() + ":")
                                 .addEmbed(EmbedCreateSpec.builder()
-                                        .image("https://crafthead.net/"+ arguments.get(2) + "/" + arguments.get(1).toString())
+                                        .image("https://crafthead.net/" + arguments.get(2) + "/" + arguments.get(1).toString())
                                         .footer(
                                                 "get a closer look at https://pinmacaroon.github.io/skinfetch/index.html", "")
                                         .build().asRequest())
