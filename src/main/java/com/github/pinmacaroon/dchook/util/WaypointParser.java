@@ -34,7 +34,7 @@ public class WaypointParser {
                         Integer.parseInt(matcher.group(6)),
                 },
                 switch (matcher.group(9)) {
-                    case "overworld" -> "the overworld";
+                    case "overworld" -> "The Overworld";
                     case "the-nether" -> "The Nether";
                     case "the-end" -> "The End";
                     default -> "Narnia";
