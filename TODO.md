@@ -12,3 +12,4 @@ This file is basically a checklist of things to do in the codebase.
 
 * Performance improvements, don't know how yet
 * rewrite using https://github.com/discord-jda/JDA because discord4j is ass
+* make a waypoint class for the xearos waypoint parser
