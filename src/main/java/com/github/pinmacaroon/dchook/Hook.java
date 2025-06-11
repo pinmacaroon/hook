@@ -31,11 +31,11 @@ public class Hook implements DedicatedServerModInitializer {
 			.setPrettyPrinting()
 			.create();
 	public static final Version VERSION = new Version.Builder()
-            .setMajorVersion(0)
-            .setMinorVersion(3)
-            .setPatchVersion(2)
+            .setMajorVersion(1)
+            .setMinorVersion(0)
+            .setPatchVersion(0)
             .setBuildMetadata("fabric")
-			.setPreReleaseVersion("alpha", "6")
+			.setPreReleaseVersion("alpha", "1")
             .build();
 	public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
 	public static final Random RANDOM = new Random(Instant.now().getEpochSecond());
@@ -45,11 +45,10 @@ public class Hook implements DedicatedServerModInitializer {
 	);
 
 	public static volatile Bot BOT;
-	public static Thread BOT_THREAD;
 
 	private static MinecraftServer MINECRAFT_SERVER;
 
-	public static MinecraftServer getMinecraftServer() {
+	public static MinecraftServer getGameServer() {
 		return MINECRAFT_SERVER;
 	}
 
@@ -73,7 +72,7 @@ public class Hook implements DedicatedServerModInitializer {
 
 		if(ModConfigs.FUNCTIONS_BOT_ENABLED){
 			try {
-				BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN, ModConfigs.FUNCTIONS_BOT_PREFIX.toCharArray()[0]);
+				BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN);
 			} catch (Exception e){
 				LOGGER.error("couldn't initialise bot, two way chat disabled");
                 LOGGER.error("{}:{}", e.getClass().getName(), e.getMessage());
@@ -103,7 +102,6 @@ public class Hook implements DedicatedServerModInitializer {
                 }
 				BOT.setGUILD_ID(body.get("guild_id").getAsLong());
 				BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
-				BOT_THREAD = BOT.start();
 			});
 			bot_rutime_thread.start();
 		} catch (Exception e) {

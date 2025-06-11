@@ -1,82 +1,81 @@
 package com.github.pinmacaroon.dchook.bot;
 
-import discord4j.core.DiscordClient;
-import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.User;
-import org.jetbrains.annotations.Nullable;
-import reactor.core.publisher.Mono;
+import com.github.pinmacaroon.dchook.bot.event.MessageReceivedListener;
+import com.github.pinmacaroon.dchook.bot.event.ReadyEventListener;
+import com.github.pinmacaroon.dchook.bot.event.SlashCommandInteractionListener;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.interactions.IntegrationType;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-import java.text.MessageFormat;
+import java.util.EnumSet;
 
 public class Bot {
-    private final DiscordClient CLIENT;
-    private GatewayDiscordClient GATEWAY_CLIENT;
+    private final JDA JDA;
     private long GUILD_ID;
     private long CHANNEL_ID;
-    private final char PREFIX;
 
-    public Bot(String token, char prefix){
-        this.CLIENT = DiscordClient.create(token);
-        this.PREFIX = prefix;
-    }
-
-    public Bot(String token){
-        this.CLIENT = DiscordClient.create(token);
-        this.PREFIX = '$';
-    }
-
-    public DiscordClient getCLIENT() {
-        return CLIENT;
-    }
-
-    @Nullable
-    public Thread start(){
-        //TODO fix possible race condition so that the bot doesn't start with nonexistent ids
-        /*
-        if(GUILD_ID == 0){
-            return null;
+    public Bot(String token) {
+        net.dv8tion.jda.api.JDA jda;
+        jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT))
+                .addEventListeners(new ReadyEventListener(this))
+                .addEventListeners(new MessageReceivedListener(this))
+                .addEventListeners(new SlashCommandInteractionListener(this))
+                .build();
+        try {
+            jda.awaitReady();
+        } catch (InterruptedException e) {
+            jda = null;
         }
-        if(CHANNEL_ID == 0){
-            return null;
-        }
-        */
-        Thread lifecyclethread = new Thread(() -> {
-            Mono<Void> login = this.CLIENT.withGateway(
-                    (GatewayDiscordClient gateway) -> {
-                        this.GATEWAY_CLIENT = gateway;
-                        System.out.println("gateway login");
-                        Mono<Void> ready = gateway.on(ReadyEvent.class, readyEvent ->
-                            Mono.fromRunnable(() -> {
-                                final User user = readyEvent.getSelf();
-                                //noinspection deprecation
-                                System.out.println(MessageFormat.format(
-                                        "logged bot in as {0}#{1}",
-                                        user.getUsername(),
-                                        user.getDiscriminator()
-                                ));
-                            })
-                        ).then();
+        this.JDA = jda;
 
-                        Mono<Void> message = gateway.on(MessageCreateEvent.class, messageCreateEvent ->
-                            Mono.fromRunnable(() -> Messenger.handeMessage(messageCreateEvent, this))
-                        ).then();
-                        return ready.and(message);
-                    }
-            );
-            login.block();
-        });
-        lifecyclethread.start();
-        return lifecyclethread;
+        CommandListUpdateAction commands = this.JDA.updateCommands();
+
+        commands.addCommands(
+                Commands.slash("time", "Check time and weather in the overworld")
+                        .addOptions(new OptionData(
+                                        OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
+                                ).setRequired(false)
+                        )
+                        .setContexts(InteractionContextType.GUILD)
+                        .setIntegrationTypes(IntegrationType.GUILD_INSTALL),
+
+                Commands.slash("mods", "Check what mods are in the server, if any")
+                        .addOptions(new OptionData(
+                                        OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
+                                ).setRequired(false)
+                        )
+                        .setContexts(InteractionContextType.GUILD)
+                        .setIntegrationTypes(IntegrationType.GUILD_INSTALL),
+
+                Commands.slash("list", "List online players")
+                        .addOptions(new OptionData(
+                                        OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
+                                ).setRequired(false)
+                        )
+                        .setContexts(InteractionContextType.GUILD)
+                        .setIntegrationTypes(IntegrationType.GUILD_INSTALL)
+        );
+
+        commands.queue();
     }
 
-    public void stop(){
-        GATEWAY_CLIENT.logout().block();
+    public JDA getJDA() {
+        return JDA;
     }
 
-    public GatewayDiscordClient getGATEWAY_CLIENT() {
-        return GATEWAY_CLIENT;
+    public void stop() {
+        this.JDA.shutdown();
+    }
+
+    public SelfUser getSelfUser() {
+        return this.JDA.getSelfUser();
     }
 
     public long getGUILD_ID() {
@@ -93,9 +92,5 @@ public class Bot {
 
     public void setCHANNEL_ID(long CHANNEL_ID) {
         this.CHANNEL_ID = CHANNEL_ID;
-    }
-
-    public char getPREFIX() {
-        return PREFIX;
     }
 }

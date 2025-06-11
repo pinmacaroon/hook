@@ -50,8 +50,12 @@ dependencies {
 	include "com.discord4j:discord4j-core:3.2.7"
 
 	 */
-	extraLibs group: 'com.discord4j', name: 'discord4j-core', version: '3.2.7'
+	extraLibs (group: 'net.dv8tion', name: 'JDA', version: '5.6.1') {
+		exclude module: 'opus-java' // required for encoding audio into opus, not needed if audio is already provided in opus encoding
+		exclude module: 'tink' // required for encrypting and decrypting audio
+	}
 	extraLibs group: 'com.github.zafarkhaja', name: 'java-semver', version: '0.10.2'
+	extraLibs group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
 	configurations.implementation.extendsFrom(configurations.extraLibs)
 }
