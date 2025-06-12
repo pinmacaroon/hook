@@ -5,6 +5,7 @@ import com.github.pinmacaroon.dchook.bot.event.ReadyEventListener;
 import com.github.pinmacaroon.dchook.bot.event.SlashCommandInteractionListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.interactions.IntegrationType;
 import net.dv8tion.jda.api.interactions.InteractionContextType;
@@ -35,6 +36,9 @@ public class Bot {
         }
         this.JDA = jda;
 
+        this.JDA.getPresence().setActivity(Activity.of(Activity.ActivityType.WATCHING,
+                "over this server (literally 1984)"));
+
         CommandListUpdateAction commands = this.JDA.updateCommands();
 
         commands.addCommands(
@@ -55,6 +59,22 @@ public class Bot {
                         .setIntegrationTypes(IntegrationType.GUILD_INSTALL),
 
                 Commands.slash("list", "List online players")
+                        .addOptions(new OptionData(
+                                        OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
+                                ).setRequired(false)
+                        )
+                        .setContexts(InteractionContextType.GUILD)
+                        .setIntegrationTypes(IntegrationType.GUILD_INSTALL),
+
+                Commands.slash("stat", "See some stats about the server")
+                        .addOptions(new OptionData(
+                                        OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
+                                ).setRequired(false)
+                        )
+                        .setContexts(InteractionContextType.GUILD)
+                        .setIntegrationTypes(IntegrationType.GUILD_INSTALL),
+
+                Commands.slash("about", "Get some info about the integration")
                         .addOptions(new OptionData(
                                         OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"
                                 ).setRequired(false)

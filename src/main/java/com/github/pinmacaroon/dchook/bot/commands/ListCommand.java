@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class ListCommand {
     public static void run(SlashCommandInteractionEvent event) {
-
         StringBuilder list = new StringBuilder();
         list.append("""
                 There are currently **%d**/%d players online:\s""".formatted(
