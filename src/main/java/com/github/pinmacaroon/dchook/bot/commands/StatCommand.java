@@ -10,27 +10,25 @@ import java.math.BigDecimal;
 
 public class StatCommand {
     public static void run(SlashCommandInteractionEvent event) {
-        StringBuilder list = new StringBuilder();
-        list.append("Stats of this instance:\n```");
 
-        list.append("uptime = %dmin%n".formatted(Hook.getGameServer().getTicks() / 20 / 60));
-        list.append("keepinventory = %b%n".formatted(Hook.getGameServer().getGameRules().get(GameRules.KEEP_INVENTORY)
-                .get()));
-        list.append("mcversion = %s%n".formatted(Hook.getGameServer().getVersion()));
-        list.append("fabricmcversion = %s%n".formatted(FabricLoaderImpl.VERSION));
-        list.append("dchookversion = %s%n".formatted(Hook.VERSION));
-        list.append("players = %d/%d%n".formatted(Hook.getGameServer().getCurrentPlayerCount(),
-                Hook.getGameServer().getMaxPlayerCount()));
-        list.append("memory = ~%smb%n".formatted(Math.rint(
-                (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024
-        )));
-        list.append("overworld_border = %s%n".formatted(
-                BigDecimal.valueOf((int) Hook.getGameServer().getOverworld().getWorldBorder().getSize()/2)
-                        .toPlainString()
-        ));
-
-        list.append("```");
-        event.reply(list.toString()).setEphemeral(event.getOption("ephemeral", false, OptionMapping::getAsBoolean))
+        String list = "Stats of this instance:\n```" +
+                "uptime = %dmin%n".formatted(Hook.getGameServer().getTicks() / 20 / 60) +
+                "keepinventory = %b%n".formatted(Hook.getGameServer().getGameRules().get(GameRules.KEEP_INVENTORY)
+                        .get()) +
+                "mcversion = %s%n".formatted(Hook.getGameServer().getVersion()) +
+                "fabricmcversion = %s%n".formatted(FabricLoaderImpl.VERSION) +
+                "dchookversion = %s%n".formatted(Hook.VERSION) +
+                "players = %d/%d%n".formatted(Hook.getGameServer().getCurrentPlayerCount(),
+                        Hook.getGameServer().getMaxPlayerCount()) +
+                "memory = ~%smb%n".formatted(Math.rint(
+                        (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024
+                )) +
+                "overworld_border = %s%n".formatted(
+                        BigDecimal.valueOf((int) Hook.getGameServer().getOverworld().getWorldBorder().getSize() / 2)
+                                .toPlainString()
+                ) +
+                "```";
+        event.reply(list).setEphemeral(event.getOption("ephemeral", false, OptionMapping::getAsBoolean))
                 .queue();
     }
 }

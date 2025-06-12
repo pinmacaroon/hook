@@ -13,7 +13,7 @@ public class ListCommand {
                 Hook.getGameServer().getPlayerManager().getMaxPlayerCount()
         ));
         Hook.getGameServer().getPlayerManager().getPlayerList().forEach(
-                serverPlayerEntity -> list.append("`" + serverPlayerEntity.getName().getString() + "` ")
+                serverPlayerEntity -> list.append("`").append(serverPlayerEntity.getName().getString()).append("` ")
         );
         event.reply(list.toString()).setEphemeral(event.getOption("ephemeral", false, OptionMapping::getAsBoolean))
                 .queue();

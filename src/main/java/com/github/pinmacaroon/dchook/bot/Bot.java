@@ -32,16 +32,15 @@ public class Bot {
         try {
             jda.awaitReady();
         } catch (InterruptedException e) {
-            jda = null;
+            this.JDA = null;
+            return;
         }
         this.JDA = jda;
 
         this.JDA.getPresence().setActivity(Activity.of(Activity.ActivityType.WATCHING,
                 "over this server (literally 1984)"));
 
-        CommandListUpdateAction commands = this.JDA.updateCommands();
-
-        commands.addCommands(
+        CommandListUpdateAction commands = this.JDA.updateCommands().addCommands(
                 Commands.slash("time", "Check time and weather in the overworld")
                         .addOptions(new OptionData(
                                         OptionType.BOOLEAN, "ephemeral", "Should the message be only visible to you?"

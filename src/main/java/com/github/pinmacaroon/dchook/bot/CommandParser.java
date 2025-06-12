@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * im hella proud of this so it isnt going anywhere >:3
+ * im hella proud of this so it isn't going anywhere >:3
  */
 public class CommandParser {
 
