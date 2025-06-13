@@ -295,7 +295,6 @@ public class PromotionProvider {
      */
     public static @Nullable JsonObject automaticPromotionSelector(){
         int id = Hook.RANDOM.nextInt(0, 10);
-        LOGGER.debug(String.valueOf(id));
         return switch (id) {
             case 0 -> getMcfetchPromotion();
             case 1 -> getOocMessageTip();

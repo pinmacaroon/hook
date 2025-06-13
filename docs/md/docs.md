@@ -54,7 +54,6 @@ messages.server.starting.allowed=true
 | functions.promotions.enabled     | true                                          | false                    | are tips and hints/promotion embeds allowed to be sent to Discord                      |
 | functions.bot.enabled            | true                                          | false                    | is two-way chat (the bot) enabled?                                                     |
 | functions.bot.token              | "TOKEN"                                       | (blank string)           | bot token                                                                              |
-| functions.bot.prefix             | $                                             | $                        | bot command prefix                                                                     |
 | functions.update                 | true                                          | false                    | auto check for updates                                                                 |
 | webhook.url                      | <https://discord.com/api/webhooks/000/ABCDEF> | (blank string)           | url of webhook                                                                         |
 | messages.server.starting         | The server is starting!                       | messages.server.starting | start message                                                                          |
@@ -65,7 +64,6 @@ messages.server.starting.allowed=true
 | messages.server.stopped.allowed  | true                                          | false                    | stop message allowed?                                                                  |
 | messages.server.started.allowed  | true                                          | false                    | opened/fully started message                                                           |
 | messages.server.stopping.allowed | true                                          | false                    | stopping message allowed?                                                              |
-| messages.server.game.allowed     | true                                          | false                    | default leave/join, advancement and death messages allowed? (currently not functional) |
 
 1. default, as in it's the value generated with the file
 2. fallback, as in if the key isn't found, this value will be used instead
@@ -79,6 +77,16 @@ Out-of-Character messages. Ending a message with double slashes (`//`) will tell
 ### Two-Way Hook
 
 Send a message in the desired Discord channel, and make that message appear in game!
+
+### Utility Commands
+
+Utility slash commands that you can use to do things like get player listing right from discord or get the current time in the server. Current commands:
+
+* `time`: get the current time and overworld weather in the server;
+* `mods`: get a list of both-sided-mods/plugins;
+* `list`: get a list of currently online players;
+* `stats`: get some technical details of the server;
+* `about`: get some info about the mod.
 
 ### Xaero's World Map support
 

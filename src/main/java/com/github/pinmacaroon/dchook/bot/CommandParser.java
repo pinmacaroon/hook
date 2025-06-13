@@ -3,6 +3,9 @@ package com.github.pinmacaroon.dchook.bot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * im hella proud of this so it isn't going anywhere >:3
+ */
 public class CommandParser {
 
     public static List<Object> parseString(String source) {

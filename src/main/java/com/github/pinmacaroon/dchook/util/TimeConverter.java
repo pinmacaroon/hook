@@ -1,10 +1,6 @@
 package com.github.pinmacaroon.dchook.util;
 
 public class TimeConverter {
-    /*
-    public static String timeOfDayToHoursMinutes(long time){
-        return (int) Math.floor(time / 1000) + ":" + (int) ((time % 1000) / 1000.0 * 60);
-    }*/
 
     /**
      * <a href="https://bukkit.org/threads/how-can-i-convert-minecraft-long-time-to-real-hours-and-minutes.122912/">https://bukkit.org/threads/how-can-i-convert-minecraft-long-time-to-real-hours-and-minutes.122912/</a>

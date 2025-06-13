@@ -2,6 +2,7 @@ package com.github.pinmacaroon.dchook.util;
 
 import com.github.pinmacaroon.dchook.Hook;
 import com.github.pinmacaroon.dchook.conf.ModConfigs;
+import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.text.Text;
@@ -120,7 +121,7 @@ public class EventListeners {
                         Array.get(list.get(2), 2),
                         list.get(3)
                 ));
-            } else request_body.put("content", message.getSignedContent());
+            } else request_body.put("content", MarkdownSanitizer.escape(message.getSignedContent()));
 
             request_body.put("username", sender.getName().getString());
             request_body.put("avatar_url", "https://crafthead.net/helm/" + message.getSender().toString());

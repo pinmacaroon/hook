@@ -7,28 +7,22 @@ import java.time.Instant;
 
 public class ModConfigs {
     public static SimpleConfig CONFIG;
-    private static ModConfigProvider configs;
-
     public static String WEBHOOK_URL;
     public static String MESSAGES_SERVER_STARTING;
     public static String MESSAGES_SERVER_STOPPED;
     public static String MESSAGES_SERVER_STARTED;
     public static String MESSAGES_SERVER_STOPPING;
     public static boolean FUNCTIONS_ALLOWOOCMESSAGES;
-
     public static boolean MESSAGES_SERVER_STARTING_ALLOWED;
     public static boolean MESSAGES_SERVER_STOPPED_ALLOWED;
     public static boolean MESSAGES_SERVER_STARTED_ALLOWED;
     public static boolean MESSAGES_SERVER_STOPPING_ALLOWED;
-
     public static boolean FUNCTIONS_MODENABLED;
     public static boolean FUNCTIONS_PROMOTIONS_ENABLED;
-
     public static boolean FUNCTIONS_BOT_ENABLED;
     public static String FUNCTIONS_BOT_TOKEN;
-    public static String FUNCTIONS_BOT_PREFIX;
-
     public static boolean FUNCTIONS_UPDATE;
+    private static ModConfigProvider configs;
 
     public static void registerConfigs() {
         configs = new ModConfigProvider();
@@ -49,7 +43,6 @@ public class ModConfigs {
         configs.addKeyValuePair(new Pair<>("functions.promotions.enabled", true), "are tips and hints/promotion embeds allowed to be sent to Discord");
         configs.addKeyValuePair(new Pair<>("functions.bot.enabled", true), "is two-way chat (the bot) enabled?");
         configs.addKeyValuePair(new Pair<>("functions.bot.token", "TOKEN"), "bot token");
-        configs.addKeyValuePair(new Pair<>("functions.bot.prefix", "$"), "bot command prefix");
         configs.addKeyValuePair(new Pair<>("functions.update", true), "check for updates");
         configs.addBlankLine();
 
@@ -89,7 +82,6 @@ public class ModConfigs {
 
         FUNCTIONS_BOT_ENABLED = CONFIG.getOrDefault("functions.bot.enabled", false);
         FUNCTIONS_BOT_TOKEN = CONFIG.getOrDefault("functions.bot.token", "");
-        FUNCTIONS_BOT_PREFIX = CONFIG.getOrDefault("functions.bot.prefix", "$");
 
         FUNCTIONS_UPDATE = CONFIG.getOrDefault("functions.update", false);
 
