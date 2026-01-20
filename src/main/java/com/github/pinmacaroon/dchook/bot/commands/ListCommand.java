@@ -1,21 +1,24 @@
 package com.github.pinmacaroon.dchook.bot.commands;
 
 import com.github.pinmacaroon.dchook.Hook;
+import com.github.pinmacaroon.dchook.conf.ModConfigs;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
+import java.text.MessageFormat;
+
 public class ListCommand {
     public static void run(SlashCommandInteractionEvent event) {
-        StringBuilder list = new StringBuilder();
-        list.append("""
-                There are currently **%d**/%d players online:\s""".formatted(
+        StringBuilder message = new StringBuilder();
+        message.append(MessageFormat.format(
+                ModConfigs.MESSAGES_BOT_LIST,
                 Hook.getGameServer().getPlayerManager().getCurrentPlayerCount(),
                 Hook.getGameServer().getPlayerManager().getMaxPlayerCount()
         ));
         Hook.getGameServer().getPlayerManager().getPlayerList().forEach(
-                serverPlayerEntity -> list.append("`").append(serverPlayerEntity.getName().getString()).append("` ")
+                serverPlayerEntity -> message.append("`").append(serverPlayerEntity.getName().getString()).append("` ")
         );
-        event.reply(list.toString()).setEphemeral(event.getOption("ephemeral", false, OptionMapping::getAsBoolean))
+        event.reply(message.toString()).setEphemeral(event.getOption("ephemeral", false, OptionMapping::getAsBoolean))
                 .queue();
     }
 }

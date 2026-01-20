@@ -110,16 +110,14 @@ public class EventListeners {
 
             HashMap<String, String> request_body = new HashMap<>();
 
-            if(WaypointParser.isWaypoint(message.getSignedContent())){
-                List<Object> list = WaypointParser.constructWaypointFromString(message.getSignedContent());
+            if(XaeoWaypoint.parse(message.getSignedContent())!=null){
+                XaeoWaypoint point = XaeoWaypoint.parse(message.getSignedContent());
                 request_body.put("content", MessageFormat.format(
-                        "*Shared a waypoint called **{0} ({1})** at `x={2} y={3} z={4}` from {5}!*",
-                        list.get(0),
-                        list.get(1),
-                        Array.get(list.get(2), 0),
-                        Array.get(list.get(2), 1),
-                        Array.get(list.get(2), 2),
-                        list.get(3)
+                        "*"+ModConfigs.MESSAGES_SERVER_WAYPOINT+"*",
+                        point.name,
+                        point.marker,
+                        point.x, point.y, point.z,
+                        point.getDimension()
                 ));
             } else request_body.put("content", MarkdownSanitizer.escape(message.getSignedContent()));
 
