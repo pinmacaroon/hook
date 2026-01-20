@@ -17,6 +17,8 @@ This file is basically a checklist of things to do in the codebase.
 * refactor method `util.PromotionProvider.sendPromotion` to `sendPromotionMessageAPIRequest`
 * refactor method `util.PromotionProvider.sendAutomaticPromotion` to `sendPromotion` and maybe merge it with `automaticPromotionSelector`
 * make a util class for method `util.WaypointParser` and use it in waypoint messages (maybe make them send an embed idk)
+* remove unused `˙bot.CommandParser`
+* make command replies static to make performance do performance things
 
 ## Implement
 
