@@ -7,17 +7,17 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.text.Text;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class EventListeners {
+
     public static void registerEventListeners(){
+
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             Hook.setMinecraftServer(server);
             if (!ModConfigs.MESSAGES_SERVER_STARTING_ALLOWED) return;
@@ -39,54 +39,54 @@ public class EventListeners {
             }
         });
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            if (!ModConfigs.MESSAGES_SERVER_STARTED_ALLOWED) return;
+        if (ModConfigs.MESSAGES_SERVER_STARTED_ALLOWED && ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED)
+            ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+                if (ModConfigs.MESSAGES_SERVER_STARTED_ALLOWED) {
+                    HashMap<String, String> request_body = new HashMap<>();
+                    request_body.put("content", "**"+ModConfigs.MESSAGES_SERVER_STARTED+"**");
+                    request_body.put("username", "server");
 
-            HashMap<String, String> request_body = new HashMap<>();
-            request_body.put("content", "**"+ModConfigs.MESSAGES_SERVER_STARTED+"**");
-            request_body.put("username", "server");
+                    HttpRequest post = HttpRequest.newBuilder()
+                            .POST(HttpRequest.BodyPublishers.ofString(Hook.GSON.toJson(request_body)))
+                            .uri(URI.create(ModConfigs.WEBHOOK_URL))
+                            .header("Content-Type", "application/json")
+                            .build();
 
-            HttpRequest post = HttpRequest.newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(Hook.GSON.toJson(request_body)))
-                    .uri(URI.create(ModConfigs.WEBHOOK_URL))
-                    .header("Content-Type", "application/json")
-                    .build();
+                    try {
+                        Hook.HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
-            try {
-                Hook.HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-
-            if (ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED) {
-                PromotionProvider.sendAutomaticPromotion(URI.create(ModConfigs.WEBHOOK_URL));
-            }
-        });
+                if (ModConfigs.FUNCTIONS_PROMOTIONS_ENABLED) {
+                    PromotionProvider.sendPromotion(URI.create(ModConfigs.WEBHOOK_URL));
+                }
+            });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            if (!ModConfigs.MESSAGES_SERVER_STOPPED_ALLOWED) return;
+            if (ModConfigs.MESSAGES_SERVER_STOPPED_ALLOWED) {
+                HashMap<String, String> request_body = new HashMap<>();
+                request_body.put("content", "**" + ModConfigs.MESSAGES_SERVER_STOPPED + "**");
+                request_body.put("username", "server");
 
-            HashMap<String, String> request_body = new HashMap<>();
-            request_body.put("content", "**"+ModConfigs.MESSAGES_SERVER_STOPPED+"**");
-            request_body.put("username", "server");
+                HttpRequest post = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(Hook.GSON.toJson(request_body)))
+                        .uri(URI.create(ModConfigs.WEBHOOK_URL))
+                        .header("Content-Type", "application/json")
+                        .build();
 
-            HttpRequest post = HttpRequest.newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(Hook.GSON.toJson(request_body)))
-                    .uri(URI.create(ModConfigs.WEBHOOK_URL))
-                    .header("Content-Type", "application/json")
-                    .build();
-
-            try {
-                Hook.HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
+                try {
+                    Hook.HTTPCLIENT.sendAsync(post, HttpResponse.BodyHandlers.ofString()).get().body();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             if(Hook.BOT != null) Hook.BOT.stop();
         });
 
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            if (!ModConfigs.MESSAGES_SERVER_STOPPING_ALLOWED) return;
+        if (ModConfigs.MESSAGES_SERVER_STOPPING_ALLOWED) ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
 
             HashMap<String, String> request_body = new HashMap<>();
             request_body.put("content", "**"+ModConfigs.MESSAGES_SERVER_STOPPING+"**");

@@ -1,6 +1,5 @@
 package com.github.pinmacaroon.dchook.util;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,9 +17,9 @@ public class XaeoWaypoint {
                 matcher.group(2),
                 Integer.parseInt(matcher.group(3)),
                 Integer.parseInt(matcher.group(4)),
-                Integer.parseInt(matcher.group(4)),
-                Integer.parseInt(matcher.group(4)),
-                matcher.group(4)
+                Integer.parseInt(matcher.group(5)),
+                Integer.parseInt(matcher.group(6)),
+                matcher.group(7)
         );
     }
 
@@ -37,7 +36,8 @@ public class XaeoWaypoint {
     private final Dimension dimension;
 
     private XaeoWaypoint(String name, String marker, int x, int y, int z, int yaw, String dimension) {
-        this.name = name;
+        if (name.equals("gui.xaero-deathpoint")) this.name = "Death Point";
+        else this.name = name;
         this.marker = marker;
         this.x = x;
         this.y = y;

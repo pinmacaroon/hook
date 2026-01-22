@@ -64,7 +64,7 @@ public class ModConfigs {
         configs.addKeyValuePair(new Pair<>("messages.server.started.allowed", true), "opened/fully started message allowed?");
         configs.addKeyValuePair(new Pair<>("messages.server.stopping.allowed", true), "stopping message allowed?");
         configs.addKeyValuePair(
-                new Pair<>("messages.server.waypoint", "Shared a waypoint called **{0} ({1})** at `{2}``{3}``{4}` from {5}!"),
+                new Pair<>("messages.server.waypoint", "Shared a waypoint called **{0} ({1})** at `{2}, {3}, {4}` from {5}!"),
                 "xaeos waypoint message.\n# {0}: waypoint name\n# {1}: waypoint letters\n# {2}, {3} and{4}: x, y and z\n# {5}: dimension name"
         );
         configs.addKeyValuePair(new Pair<>("messages.bot.list", "There are currently **{0}**/{1} players online: "), "the list command preamble message\n# {0}: online players\n# {1}: max players");
