@@ -1,10 +1,12 @@
 package com.github.pinmacaroon.dchook.bot.commands;
 
+import com.github.pinmacaroon.dchook.conf.ModConfigs;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModEnvironment;
 
+import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ModsCommand {
@@ -24,9 +26,9 @@ public class ModsCommand {
         });
         String response;
         if (mods_count.get() == 0) {
-            response = "The server currently has no required mods, you can join with a vanilla client!";
+            response = ModConfigs.MESSAGES_BOT_MODS_NONE;
         } else {
-            response = "The server currently has " + mods_count.get() + " required mods:\n" + mod_list;
+            response = MessageFormat.format(ModConfigs.MESSAGES_BOT_MODS_LIST, mods_count.get()) + "\n" + mod_list;
         }
         if (response.length() > 2000) {
             response = response.substring(0, 1995) + "[...]";

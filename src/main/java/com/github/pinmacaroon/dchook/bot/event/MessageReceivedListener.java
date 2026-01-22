@@ -4,6 +4,7 @@ import com.github.pinmacaroon.dchook.Hook;
 import com.github.pinmacaroon.dchook.bot.Bot;
 import com.github.pinmacaroon.dchook.conf.ModConfigs;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReference;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.text.MutableText;
@@ -34,9 +35,10 @@ public class MessageReceivedListener extends ListenerAdapter {
         MutableText reply;
         MutableText content;
 
-        if (message.getMessageReference() != null) {
+        MessageReference r = message.getMessageReference();
+        if (r != null) {
             reply = Text.literal("<@%s -> ".formatted(
-                    message.getReferencedMessage().getAuthor().getName()
+                    r.getMessage().getAuthor().getName()
             ));
         } else {
             reply = Text.literal("<");

@@ -28,7 +28,7 @@ public class SlashCommandInteractionListener extends ListenerAdapter {
             case "about" -> AboutCommand.run(event);
             default -> event.reply("""
                             An internal error occurred! Please send a bug report: \
-                            <https://pinmacaroon.github.io/hook/links.html>""").setEphemeral(true)
+                            <https://github.com/pinmacaroon/hook/issues>""").setEphemeral(true)
                     .addFiles(FileUpload.fromData(new File("https://pinmacaroon.github.io/hook/res/works.png")))
                     .queue();
         }

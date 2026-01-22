@@ -12,6 +12,10 @@ public class ModConfigs {
     public static String MESSAGES_SERVER_STOPPED;
     public static String MESSAGES_SERVER_STARTED;
     public static String MESSAGES_SERVER_STOPPING;
+    public static String MESSAGES_SERVER_WAYPOINT;
+    public static String MESSAGES_BOT_LIST;
+    public static String MESSAGES_BOT_MODS_LIST;
+    public static String MESSAGES_BOT_MODS_NONE;
     public static boolean FUNCTIONS_ALLOWOOCMESSAGES;
     public static boolean MESSAGES_SERVER_STARTING_ALLOWED;
     public static boolean MESSAGES_SERVER_STOPPED_ALLOWED;
@@ -59,6 +63,14 @@ public class ModConfigs {
         configs.addKeyValuePair(new Pair<>("messages.server.stopped.allowed", true), "stop message allowed?");
         configs.addKeyValuePair(new Pair<>("messages.server.started.allowed", true), "opened/fully started message allowed?");
         configs.addKeyValuePair(new Pair<>("messages.server.stopping.allowed", true), "stopping message allowed?");
+        configs.addKeyValuePair(
+                new Pair<>("messages.server.waypoint", "Shared a waypoint called **{0} ({1})** at `{2}, {3}, {4}` from {5}!"),
+                "xaeos waypoint message.\n# {0}: waypoint name\n# {1}: waypoint letters\n# {2}, {3} and{4}: x, y and z\n# {5}: dimension name"
+        );
+        configs.addKeyValuePair(new Pair<>("messages.bot.list", "There are currently **{0}**/{1} players online: "), "the list command preamble message\n# {0}: online players\n# {1}: max players");
+        configs.addKeyValuePair(new Pair<>("messages.bot.mods.list", "The server currently has {0} required mods: "), "the mods command preamble message\n# {0}: number of mods");
+        configs.addKeyValuePair(new Pair<>("messages.bot.mods.none", "The server currently has no required mods, you can join with a vanilla client!"), "the mods command message when no mods are needed by the client");
+        configs.addDocumentationLine("note: the time command cannot be customised yet because im lazy :3");
 
         configs.addBlankLine();
         configs.addDocumentationLine("Something didn't work? See the documentation or report an issue at this url: <" + Hook.DOCS_URL + ">!");
@@ -70,6 +82,10 @@ public class ModConfigs {
         MESSAGES_SERVER_STARTED = CONFIG.getOrDefault("messages.server.started", "messages.server.started");
         MESSAGES_SERVER_STOPPED = CONFIG.getOrDefault("messages.server.stopped", "messages.server.stopped");
         MESSAGES_SERVER_STOPPING = CONFIG.getOrDefault("messages.server.stopping", "messages.server.stopping");
+        MESSAGES_SERVER_WAYPOINT = CONFIG.getOrDefault("messages.server.waypoint", "messages.server.waypoint");
+        MESSAGES_BOT_LIST = CONFIG.getOrDefault("messages.bot.list", "messages.bot.list");
+        MESSAGES_BOT_MODS_LIST = CONFIG.getOrDefault("messages.bot.mods.list", "messages.bot.mods.list");
+        MESSAGES_BOT_MODS_NONE = CONFIG.getOrDefault("messages.bot.mods.none", "messages.bot.mods.none");
         FUNCTIONS_ALLOWOOCMESSAGES = CONFIG.getOrDefault("functions.allow_ooc_messages", false);
 
         MESSAGES_SERVER_STARTING_ALLOWED = CONFIG.getOrDefault("messages.server.starting.allowed", false);

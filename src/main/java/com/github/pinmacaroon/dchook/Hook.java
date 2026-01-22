@@ -32,10 +32,10 @@ public class Hook implements DedicatedServerModInitializer {
             .create();
     public static final Version VERSION = new Version.Builder()
             .setMajorVersion(1)
-            .setMinorVersion(0)
+            .setMinorVersion(1)
             .setPatchVersion(0)
-            .setBuildMetadata("fabric")
-            //.setPreReleaseVersion("alpha", "2")
+            .setBuildMetadata("fabric","1","21","1")
+//            .setPreReleaseVersion("newyear", "1")
             .build();
     public static final String DOCS_URL = "https://modrinth.com/mod/dchook";
     public static final Random RANDOM = new Random(Instant.now().getEpochSecond());
@@ -45,6 +45,7 @@ public class Hook implements DedicatedServerModInitializer {
     );
 
     public static volatile Bot BOT;
+    public static boolean BOT_ENABLED = false;
 
     private static MinecraftServer MINECRAFT_SERVER;
 
@@ -70,15 +71,8 @@ public class Hook implements DedicatedServerModInitializer {
             return;
         }
 
-        if(ModConfigs.FUNCTIONS_BOT_ENABLED){
-            try {
-                BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN);
-            } catch (Exception e){
-                LOGGER.error("couldn't initialise bot, two way chat disabled");
-                LOGGER.error("{}:{}", e.getClass().getName(), e.getMessage());
-                return;
-            }
-        }
+        if(ModConfigs.FUNCTIONS_BOT_ENABLED) bottedStart();
+        else botlessStart();
 
         try {
             HttpRequest get_webhook = HttpRequest.newBuilder()
@@ -96,14 +90,16 @@ public class Hook implements DedicatedServerModInitializer {
                 );
                 return;
             }
-            Thread bot_rutime_thread = new Thread(() -> {
-                while (BOT == null) {
-                    Thread.onSpinWait();
-                }
-                BOT.setGUILD_ID(body.get("guild_id").getAsLong());
-                BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
-            });
-            bot_rutime_thread.start();
+            if (BOT_ENABLED) {
+                Thread bot_rutime_thread = new Thread(() -> {
+                    while (BOT == null) {
+                        Thread.onSpinWait();
+                    }
+                    BOT.setGUILD_ID(body.get("guild_id").getAsLong());
+                    BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
+                });
+                bot_rutime_thread.start();
+            }
         } catch (Exception e) {
             LOGGER.error("{}:{}", e.getClass().getName(), e.getMessage());
             throw new RuntimeException(e);
@@ -117,5 +113,20 @@ public class Hook implements DedicatedServerModInitializer {
         }
 
         EventListeners.registerEventListeners();
+    }
+
+    private void botlessStart(){
+        LOGGER.info("two way chat has been disabled by the config (botless start)");
+    }
+
+    private void bottedStart(){
+        try {
+            BOT = new Bot(ModConfigs.FUNCTIONS_BOT_TOKEN);
+            BOT_ENABLED = true;
+        } catch (Exception e){
+            LOGGER.error("couldn't initialise bot, two way chat disabled! please check your bot token or send a bug report on github!");
+            LOGGER.error("{}:{}", e.getClass().getName(), e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
