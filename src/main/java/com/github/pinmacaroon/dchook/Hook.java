@@ -32,7 +32,7 @@ public class Hook implements DedicatedServerModInitializer {
             .create();
     public static final Version VERSION = new Version.Builder()
             .setMajorVersion(1)
-            .setMinorVersion(1)
+            .setMinorVersion(2)
             .setPatchVersion(0)
             .setBuildMetadata("fabric","1","21","1")
 //            .setPreReleaseVersion("newyear", "1")
