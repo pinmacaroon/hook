@@ -44,9 +44,12 @@ public class Hook implements DedicatedServerModInitializer {
             "^https:\\/\\/(ptb\\.|canary\\.)?discord\\.com\\/api\\/webhooks\\/\\d+\\/.+$"
     );
 
+    public static URI WEBHOOK_URI; 
+    
     public static volatile Bot BOT;
     public static boolean BOT_ENABLED = false;
 
+    private boolean IS_THREAD = false;
     private static MinecraftServer MINECRAFT_SERVER;
 
     public static MinecraftServer getGameServer() {
@@ -73,11 +76,18 @@ public class Hook implements DedicatedServerModInitializer {
 
         if(ModConfigs.FUNCTIONS_BOT_ENABLED) bottedStart();
         else botlessStart();
-
-        try {
+        
+        if(ModConfigs.IS_THREAD) {
+            IS_THREAD = true;
+            WEBHOOK_URI = URI.create(ModConfigs.WEBHOOK_URL + "?thread_id=" + ModConfigs.THREAD_ID);
+        } else {
+            WEBHOOK_URI = URI.create(ModConfigs.WEBHOOK_URL);
+        }
+        
+        try {    
             HttpRequest get_webhook = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create(ModConfigs.WEBHOOK_URL))
+                    .uri(WEBHOOK_URI)
                     .build();
 
             HttpResponse<String> response = HTTPCLIENT.send(get_webhook, HttpResponse.BodyHandlers.ofString());
@@ -96,7 +106,11 @@ public class Hook implements DedicatedServerModInitializer {
                         Thread.onSpinWait();
                     }
                     BOT.setGUILD_ID(body.get("guild_id").getAsLong());
-                    BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
+                    if (IS_THREAD) {
+                        BOT.setCHANNEL_ID(Long.parseLong(ModConfigs.THREAD_ID));
+                    } else {
+                        BOT.setCHANNEL_ID(body.get("channel_id").getAsLong());
+                    }
                 });
                 bot_rutime_thread.start();
             }
